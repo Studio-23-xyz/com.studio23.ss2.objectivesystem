@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 
   Name: Basic Objective 2
-  Description: Basic Objective 2
+  Description: Basic Objective 2 Desc
   _priority: 2
   _tasks:
   - {fileID: 11400000, guid: b20b701e9de311240bf2db5742fca624, type: 2}

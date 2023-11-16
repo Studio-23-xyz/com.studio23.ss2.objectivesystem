@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Studio23.SS2.ObjectiveSystem.Core
 {
-    [CreateAssetMenu(menuName = "Objectives/Task", fileName = "objective task")]
+    [CreateAssetMenu(menuName = "Studio-23/Objective System/Task", fileName = "objective task")]
     [Serializable]
     public class ObjectiveTask : ItemBase
     {

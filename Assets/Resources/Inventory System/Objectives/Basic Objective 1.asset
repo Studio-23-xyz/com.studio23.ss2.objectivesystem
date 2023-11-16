@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 
   Name: Basic Objective 1
-  Description: Basic Objective 1
+  Description: Basic Objective 1 Desco Elysium
   _priority: 1
   _tasks:
   - {fileID: 11400000, guid: c75813d7903b41e498626046357cfb92, type: 2}

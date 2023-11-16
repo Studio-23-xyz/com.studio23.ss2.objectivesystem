@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Bdeshi.Helpers.Utility;
+using Cysharp.Threading.Tasks;
 using Studio23.SS2.ObjectiveSystem.Core;
 using TMPro;
 using UnityEngine;
@@ -42,10 +43,15 @@ namespace Studio23.SS2.ObjectiveSystem.UI
             );
         }
 
-        private void Start()
+        private async void Start()
         {
             ObjectiveManager.Instance.SelectedObjectiveChanged += LoadObjectiveData;
             ObjectiveManager.Instance.SelectedObjectiveUpdated += LoadObjectiveData;
+            
+            while (!ObjectiveManager.Instance.Initialized)
+            {
+                await UniTask.Yield();
+            }
 
             LoadObjectiveData();
         }
@@ -64,6 +70,7 @@ namespace Studio23.SS2.ObjectiveSystem.UI
         }
         public void LoadObjectiveData(ObjectiveBase objective)
         {
+            Debug.Log("selected objective changed");
             if(objective == null)
             {
                 gameObject.SetActive(false);

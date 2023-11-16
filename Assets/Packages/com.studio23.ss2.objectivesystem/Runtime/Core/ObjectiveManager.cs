@@ -64,6 +64,14 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
         }
 
+        public async UniTask AwaitInitialization()
+        {
+            while (!ObjectiveManager.Instance.Initialized)
+            {
+                await UniTask.Yield();
+            }
+        }
+
         private void InitializeObjectives()
         {
             foreach (var objective in Objectives.GetAll())
@@ -99,16 +107,29 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             {
                 Hints.RemoveItem(objectiveHint);
             }
+
+            if (objectiveHint.ParentObjective == _selectedObjective)
+            {
+                HandleSelectedObjectiveUpdates(_selectedObjective);
+            }
         }
 
         private void HandleObjectiveTaskRemoved(ObjectiveTask task)
         {
             Tasks.RemoveItem(task);
+            if (task.ParentObjective == _selectedObjective)
+            {
+                HandleSelectedObjectiveUpdates(_selectedObjective);
+            }
         }
 
         private void HandleObjectiveTaskAdded(ObjectiveTask task)
         {
             Tasks.AddItemUnique(task);
+            if (task.ParentObjective == _selectedObjective)
+            {
+                HandleSelectedObjectiveUpdates(_selectedObjective);
+            }
         }
 
 
@@ -456,7 +477,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             _activeObjectives.Clear();
             
             await Load();
-            HandleActiveObjectiveListUpdated();
+
         }
         /// <summary>
         /// Load from save
@@ -469,6 +490,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             await Tasks.SafeLoadInventory();
             await Objectives.SafeLoadInventory();
             InitializeObjectives();
+            
+            HandleActiveObjectiveListUpdated();
+            SelectNewBestObjective();
             Initialized = true;
         }
         [ShowIf("InstanceValid")]

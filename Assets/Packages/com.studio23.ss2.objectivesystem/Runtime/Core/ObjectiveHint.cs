@@ -3,15 +3,16 @@ using NaughtyAttributes;
 using Newtonsoft.Json;
 using Studio23.SS2.InventorySystem.Data;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Studio23.SS2.ObjectiveSystem.Core
 {
-    [CreateAssetMenu(menuName = "Objectives/Hint", fileName = "Hint")]
+    [CreateAssetMenu(menuName = "Studio-23/Objective System/Hint", fileName = "objective Hint")]
     [Serializable]
     public class ObjectiveHint: ItemBase
     {
-        [SerializeField] ObjectiveBase _objective;
-        public ObjectiveBase Objective => _objective;
+        [SerializeField] ObjectiveBase _parentObjective;
+        public ObjectiveBase ParentObjective => _parentObjective;
         [SerializeField] int _priority;
         public int Priority => _priority;
 
@@ -22,7 +23,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
         public void SetObjective(ObjectiveBase objective)
         {
-            this._objective = objective;
+            this._parentObjective = objective;
         }
 
         public void SetActive(bool shouldBeActive)

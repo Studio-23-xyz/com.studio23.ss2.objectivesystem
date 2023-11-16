@@ -131,6 +131,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// </summary>
         public virtual void Initialize()
         {
+            Debug.Log(" init " + this);
             foreach (var hint in Hints)
             {
                 hint.SetObjective(this);
@@ -180,12 +181,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// </summary>
         public virtual void Cleanup()
         {
-            ObjectiveActivationToggled = null;
-            OnObjectiveCompletionUpdated = null;
-            OnObjectiveHintUpdate = null;
-            OnObjectiveTaskAdded = null;
-            OnObjectiveTaskRemoved = null;
-            
+            Debug.Log("cleanup " + this);
             ActiveTasks.Clear();
             ActiveHints.Clear();
             
@@ -216,8 +212,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 _activeTasks.Remove(task);
                 OnObjectiveTaskRemoved?.Invoke(task);
             }
-
-            HandleTaskCompletionUpdate(task);
         }
 
         public void SetPriority(int priority)
@@ -227,8 +221,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
         private void HandleTaskCompletionUpdate(ObjectiveTask task)
         {
-            Debug.Log( this + " task completion " +  CheckCompletion());
-            
             if(!IsActive)
                 return;
 
@@ -259,7 +251,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             int numRemaining = Tasks.Count;
             foreach (var task in ActiveTasks)
             {
-                Debug.Log(numRemaining + " " + task);
                 if (task.IsCompleted)
                 {
                     numRemaining--;
@@ -289,6 +280,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
             OnObjectiveHintUpdate?.Invoke(puzzleObjectiveHint);
         }
+        [ShowIf("ObjectiveManagerExists")]
         [Button]
         internal void ResetProgress()
         {
@@ -327,7 +319,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public override string ToString()
         {
 
-            return $"{Name} {_state}";
+            return $"{name} {_state}";
         }
     }
 }

@@ -10,17 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 046e215ce6402724bab2ff4ff806dc0e, type: 3}
-  m_Name: Basic Objective 3
+  m_Name: RGB Pillar objective
   m_EditorClassIdentifier: 
   Id: 
-  Name: Basic objective 3
-  Description: BAsic objective 3 Nadesco
-  _priority: 3
+  Name: RGB pillar objective
+  Description: RGB pillar objective desc
+  _priority: 0
   _tasks:
-  - {fileID: 11400000, guid: 01b72c0d985d9524e80b19b742261375, type: 2}
-  - {fileID: 11400000, guid: 6833af241de4cfb42b12d07fb82bbafd, type: 2}
-  - {fileID: 11400000, guid: 40cacaa57c05b8847945717de654996e, type: 2}
-  - {fileID: 11400000, guid: d6ace57317eec8f4ea7cb394b8e744d8, type: 2}
+  - {fileID: 11400000, guid: 853084c40733a534caa35a07089b9b22, type: 2}
+  - {fileID: 11400000, guid: 6f5d189ed6e19c84ba4a7690b430fce0, type: 2}
+  - {fileID: 11400000, guid: a9fb97dcba52ec143b4a57efd5847cc7, type: 2}
   _activeTasks: []
   _hints: []
   _activeHints: []
