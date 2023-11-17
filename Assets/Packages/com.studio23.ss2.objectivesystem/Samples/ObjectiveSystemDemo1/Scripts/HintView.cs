@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Studio23.SS2.ObjectiveSystem.UI
+namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
 {
     public class HintView : MonoBehaviour
     {

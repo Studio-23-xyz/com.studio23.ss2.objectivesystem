@@ -405,13 +405,19 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }else if (ActiveObjectives.Count > 1)
             {
                 int newIndex = -1;
-                for (int i = 1; i < (ActiveObjectives.Count + 1); i++)
+                for (int i = 1; i < (ActiveObjectives.Count); i++)
                 {
                     int testIndex = (_selectedObjectiveIndex + i + ActiveObjectives.Count) % ActiveObjectives.Count;
                     if (!ActiveObjectives[testIndex].IsCompleted)
                     {
                         newIndex = testIndex;
                     }
+                } 
+                
+                //if we don't have another objective to selected an current selected objective is not null, don't change
+                if (newIndex == -1 && !_selectedObjective.IsCompleted)
+                {
+                    return;
                 }
                 SetSelectedIndex(newIndex);
             }

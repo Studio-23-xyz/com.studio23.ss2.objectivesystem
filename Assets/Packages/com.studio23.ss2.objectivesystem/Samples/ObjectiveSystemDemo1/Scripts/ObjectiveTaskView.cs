@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Studio23.SS2.ObjectiveSystem.UI
+namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
 {
     public class ObjectiveTaskView : MonoBehaviour
     {

@@ -10,15 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 046e215ce6402724bab2ff4ff806dc0e, type: 3}
-  m_Name: RGB Pillar objective
+  m_Name: Blue Pillar objective
   m_EditorClassIdentifier: 
   Id: 
-  Name: 'RGB Pillar one by one objective '
-  Description: RGB Pillar one by one objective  desc
+  Name: Reach the red pillar objective
+  Description: Reach the red pillar objective desc
   _priority: 0
   _tasks:
-  - {fileID: 11400000, guid: f9e5c7e9a23e66f4e8867a48abf89856, type: 2}
-  - {fileID: 11400000, guid: ef7076cdd6c03e24d892c32be2b96da2, type: 2}
   - {fileID: 11400000, guid: 63888bd111bed804496fcf4268b8438b, type: 2}
   _activeTasks: []
   _hints: []
