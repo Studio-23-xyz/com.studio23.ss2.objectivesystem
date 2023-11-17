@@ -1,8 +1,6 @@
 # Objective System
 Objective System is a package for handling objectives, objective subtask etc. It also supports hints tied to tasks. 
 
-Objectives, tasks and hints are ScriptableObjects that are saved in `Resources/Inventory System/Objectives`, `Resources/Inventory System/Tasks`,`Resources/Inventory System/Hints`.
-
 ## Objectives
 An objective is a SO that contains tasks and hints. It maintains a list of active tasks and hints. When all of an objective's tasks are complete, the objective itself will get completed. 
 
@@ -38,6 +36,11 @@ You need an `ObjectiveManager` and a `SaveSystem` singleton in your scene. The s
 
 Objectives and tasks do not implement start/completion logic. You have to call `objective.CompleteObjective()` or `task.CompleteTask()` yourself. However, handling dependencies and objective/task start/end/completion is handled by the objective system.
 
+The functions need to called in correct order. Ex: Calling CompleteObjective before StartObjective will do nothing and fire a logwarning. The flowcharts show the order:
+
+![](https://github.com/Studio-23-xyz/ObjectiveSystem/blob/b2e993c968145ede24ad1e76bc33be08412aacfb/Assets/Packages/com.studio23.ss2.objectivesystem/Screenshots~/objectiveState.png)
+
+![](https://github.com/Studio-23-xyz/ObjectiveSystem/blob/fa5314e097a83cda23eee333f7f33db4b5b90a75/Assets/Packages/com.studio23.ss2.objectivesystem/Screenshots~/taskstate.png)
 
 ## Setting tasks/hints for an objective
 You can edit the `Tasks` and `Hints` serialized list under the Objective SO to add/remove tasks/hints to the objective. Don't edit them in Playmode.
@@ -46,11 +49,5 @@ You don't need to edit the ActiveTasks/ActiveHints list.
 
 You also don't need to set the `ParentObjective` field in the task/hint SO. That is automatically set based on the `Tasks` and `Hints` serialized list.
 
-# Samples.
-The sample scenes show example UI for a list for all objectives and one for showing the current SelectedObjective. 
-In playmode, you can go to the Objective/Task/Hint SO and use the Editor Script buttons to add/remove/update them as you want.
-
-
-
- 
- 
+# Save/Load
+Saving and loading requires that the SOs be put in the resources folder d in `Resources/Inventory System/Objectives`, `Resources/Inventory System/Tasks`,`Resources/Inventory System/Hints`. SOs that are not in those folder work in play mode but won't survive saving/loading.
