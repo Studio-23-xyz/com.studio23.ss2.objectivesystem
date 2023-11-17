@@ -55,6 +55,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 return;
             _state = ObjectiveTaskState.NotStarted;
             OnTaskActiveToggle?.Invoke(this);
+            OnTaskCompletionToggle?.Invoke(this);
         }
         [ShowIf("ObjectiveManagerExists")]
         [Button]

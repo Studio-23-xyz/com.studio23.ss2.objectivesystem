@@ -13,7 +13,7 @@ namespace Studio23.SS2.ObjectiveSystem.Tests.EditMode
         List<ObjectiveTask> _tasks;
         List<ObjectiveHint> _hints;
 
-        private string _objectivePath = "Assets/com.studio23.ss2/ObjectiveSystem/Editor/TestResources/";
+        private string _objectivePath = "Assets/Packages/com.studio23.ss2.objectivesystem/Editor/TestResources/";
         [SetUp]
         public void SetUp()
         {
@@ -284,6 +284,7 @@ namespace Studio23.SS2.ObjectiveSystem.Tests.EditMode
             
             task1.RemoveTask();
             Debug.Log(task1);
+            Debug.Log(objective1);
             Assert.IsFalse(objective1.IsCompleted);
             task1.AddTask();
             task1.CompleteTask();
