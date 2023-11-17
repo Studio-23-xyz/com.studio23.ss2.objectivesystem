@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using Studio23.SS2.InventorySystem.Core;
+using Studio23.SS2.ObjectiveSystem.Data;
 using Studio23.SS2.ObjectiveSystem.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -144,16 +145,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 RemoveObjectiveFromActives(objective);
             }
         }
-        public void CompleteObjective(ObjectiveBase objective)
-        {
-            Debug.Log(Objectives.HasItem(objective) + " " + objective.CanComplete );
-            if(!Objectives.HasItem(objective) || !objective.CanComplete)
-                return;
-            objective.HandleObjectiveCompletion();
-            HandleActiveObjectiveListUpdated();
 
-            OnActiveObjectiveListUpdated?.Invoke();
-        }
 
         public void StartObjective(ObjectiveBase newObjective) {
 
@@ -163,7 +155,10 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             bool canStartObjective = !hadObjective || newObjective.CanStart;
             DLog("start new objective request " + newObjective + hadObjective + canStartObjective, newObjective);
             if(!canStartObjective)
+            {
+                Debug.LogWarning("can't start objective at state " + newObjective.State);
                 return;
+            }
             
             if (!hadObjective)
             {
@@ -187,27 +182,66 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// <summary>
         /// This removes the objective from active list and marks it as cancelled or finished based on completion
         /// </summary>
-        /// <param name="newObjective"></param>
-        public void EndObjective(ObjectiveBase newObjective) {
-            DLog("start new objective request " + newObjective, newObjective);
+        /// <param name="objective"></param>
+        public void EndObjective(ObjectiveBase objective) {
+            DLog("start new objective request " + objective, objective);
             //do not trust objective state unless it is in objectives
-            if (Objectives.HasItem(newObjective) && newObjective.IsActive)
+            var hasItem = Objectives.HasItem(objective);
+            var objectiveIsActive = objective.IsActive;
+            if (hasItem && objectiveIsActive)
             {
-                RemoveObjectiveFromActives(newObjective);
+                RemoveObjectiveFromActives(objective);
+            }
+            else
+            {
+                if(!hasItem)
+                    Debug.LogWarning("can't end objective " + objective + " that isn't in the objectives inventory");
+                else
+                    Debug.LogWarning("can't end objective " + objective + " in state " + objective.State);
             }
         }
-
-        public void CancelObjectiveCompletion(ObjectiveBase newObjective)
+        public void CompleteObjective(ObjectiveBase objective)
         {
-            DLog("start new objective request " + newObjective, newObjective);
-            if (Objectives.HasItem(newObjective) && newObjective.CanCancelCompletion)
+            var hasItem = Objectives.HasItem(objective);
+            var canComplete = objective.CanComplete;
+            
+            if (hasItem && canComplete)
             {
-                newObjective.HandleObjectiveCompletionCancel();
-                HandleActiveObjectiveCompletionUpdate(newObjective);
-                DLog("restarted existing objective" + newObjective, newObjective);
+                objective.HandleObjectiveCompletion();
+                HandleActiveObjectiveListUpdated();
+
+                OnActiveObjectiveListUpdated?.Invoke();
+            }else
+            {
+                if(!hasItem)
+                    Debug.LogWarning("can't complete objective " + objective + " that isn't in the objectives inventory");
+                else
+                    Debug.LogWarning("can't complete objective " + objective + " in state " + objective.State);
+            }
+        }
+        public void CancelObjectiveCompletion(ObjectiveBase objective)
+        {
+            DLog("start new objective request " + objective, objective);
+            var hasItem = Objectives.HasItem(objective);
+            var objectiveCanCancelCompletion = objective.CanCancelCompletion;
+            if (hasItem && objectiveCanCancelCompletion)
+            {
+                objective.HandleObjectiveCompletionCancel();
+                HandleActiveObjectiveCompletionUpdate(objective);
+                DLog("restarted existing objective" + objective, objective);
+            }else
+            {
+                if(!hasItem)
+                    Debug.LogWarning("can't cancel objective " + objective + " that isn't in the objectives inventory");
+                else
+                    Debug.LogWarning("can't cancel objective " + objective + " in state " + objective.State);
             }
         }
 
+        public bool IsObjectiveActiveAndValid(ObjectiveBase objective)
+        {
+            return Objectives.HasItem(objective) && objective.IsActive;
+        }
         private void HandleHintUpdated(ObjectiveHint objectiveHint)
         {
             OnActiveObjectiveHintToggled?.Invoke(objectiveHint);

@@ -1,5 +1,5 @@
 {
-    "name": "DefaultInputActions",
+    "name": "ObjectiveSysteSampleInputMap",
     "maps": [
         {
             "name": "Player",
@@ -10,6 +10,15 @@
                     "type": "Value",
                     "id": "7eeea403-ce04-4b77-8063-c3f0aa8afa1a",
                     "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ToggleObjectives",
+                    "type": "Button",
+                    "id": "f8a2f41a-b329-4fdf-adc4-e92fd7fbf699",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -48,6 +57,17 @@
                     "action": "ChangeSelectedObjective",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "91abef0a-665e-477e-8aee-5f8c520dc643",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleObjectives",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

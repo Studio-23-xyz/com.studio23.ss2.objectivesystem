@@ -363,7 +363,7 @@ namespace Studio23.SS2.ObjectiveSystem.Tests.EditMode
             objective1.Hints.Add(hint1);
             objective1.Hints.Add(hint2);
             objective1.Hints.Add(hint3);
-            objective1.Initialize();
+            objective1.StartObjective();
             
             Assert.IsEmpty(objective1.ActiveHints);
             hint1.Add();

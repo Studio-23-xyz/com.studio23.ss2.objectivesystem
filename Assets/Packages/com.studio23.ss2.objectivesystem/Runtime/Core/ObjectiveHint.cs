@@ -26,7 +26,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             this._parentObjective = objective;
         }
 
-        public void SetActive(bool shouldBeActive)
+        internal void SetActive(bool shouldBeActive)
         {
             if (shouldBeActive == IsActive)
                 return;
@@ -37,6 +37,11 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [Button]
         public void Add()
         {
+            if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
+            {
+                Debug.LogWarning("can't add hint " + this + " because parent objective is not active and valid");
+                return;
+            }
             SetActive(true);
         }
 
@@ -48,6 +53,11 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [Button]
         public void Remove()
         {
+            if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
+            {
+                Debug.LogWarning("can't remove hint " + this + " because parent objective is not active and valid");
+                return;
+            }
             SetActive(false);
         }
         public override void AssignSerializedData(string data)

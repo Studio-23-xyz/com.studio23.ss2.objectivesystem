@@ -18,6 +18,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         // we prevent serialization to avoid merge conflicts
         // This is manually serialized when saved as needed.
         [ShowNonSerializedField] private ObjectiveState _state;
+        public ObjectiveState State => _state;
         public string ObjectiveUITitle => Name;
         public string ObjectiveUIDesc => Description;
         [ShowNativeProperty]
@@ -116,7 +117,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [Button]
         public void CompleteObjective()
         {
-            Debug.Log("COMPLETE " + this, this);
             ObjectiveManager.Instance.CompleteObjective(this);
         }
         
@@ -201,14 +201,11 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (task.IsActive)
             {
-                Debug.Log(this + " add " + task);
                 _activeTasks.Add(task);
                 OnObjectiveTaskAdded?.Invoke(task);
             }
             else
             {
-                Debug.Log(this + " remove " + task);
-
                 _activeTasks.Remove(task);
                 OnObjectiveTaskRemoved?.Invoke(task);
             }

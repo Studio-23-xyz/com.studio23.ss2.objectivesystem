@@ -42,8 +42,17 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [Button]
         public void AddTask()
         {
-            if(_state != ObjectiveTaskState.NotStarted)
+            if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
+            {
+                Debug.LogWarning("can't add task " + this + " because parent objective is not active and valid");
                 return;
+            }
+            if(_state != ObjectiveTaskState.NotStarted)
+            {
+                Debug.LogWarning("can't add task " + this + " because it has already started");
+                return;
+            }
+            
             _state = ObjectiveTaskState.InProgress;
             OnTaskActiveToggle?.Invoke(this);
         }
@@ -51,8 +60,16 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [Button]
         public void RemoveTask()
         {
-            if(_state == ObjectiveTaskState.NotStarted)
+            if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
+            {
+                Debug.LogWarning("can't remove task " + this + " because parent objective is not active and valid");
                 return;
+            }
+            if(_state == ObjectiveTaskState.NotStarted)
+            {
+                Debug.LogWarning("can't remove task " + this + " because it hasn't been started");
+                return;
+            }
             _state = ObjectiveTaskState.NotStarted;
             OnTaskActiveToggle?.Invoke(this);
             OnTaskCompletionToggle?.Invoke(this);
@@ -65,11 +82,21 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             OnTaskActiveToggle?.Invoke(this);
             OnTaskCompletionToggle?.Invoke(this);
         }
-        [ShowIf("ObjectiveManagerExists")][Button]
+        [ShowIf("ObjectiveManagerExists")]
+        [Button]
         public void CompleteTask()
         {
-            if(_state != ObjectiveTaskState.InProgress)
+            if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
+            {
+                Debug.LogWarning("can't complete task " + this + " because parent objective is not active and valid");
                 return;
+            }
+            if(_state != ObjectiveTaskState.InProgress)
+            {
+                Debug.LogWarning("can't complete task " + this + " because it isn't in progress");
+                return;
+            }
+
             _state = ObjectiveTaskState.Completed;
             OnTaskCompletionToggle?.Invoke(this);
         }
@@ -81,6 +108,17 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// <param name="taskToReplaceWith"></param>
         public void CompleteAndReplaceSubtask(ObjectiveTask taskToBeReplaced, ObjectiveTask taskToReplaceWith)
         {
+            if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
+            {
+                Debug.LogWarning("can't complete task " + this + " because parent objective is not active and valid");
+                return;
+            }
+            if(_state != ObjectiveTaskState.InProgress)
+            {
+                Debug.LogWarning("can't complete task " + this + " because it isn't in progress");
+                return;
+            }
+            
             taskToReplaceWith.AddTask();
             taskToBeReplaced.CompleteTask();
 
