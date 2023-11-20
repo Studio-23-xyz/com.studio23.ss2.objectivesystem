@@ -1,0 +1,26 @@
+{
+    "name": "com.studio23.ss2.objectivesystem.tests.editmode",
+    "rootNamespace": "Studio23.SS2.ObjectiveSystem.Tests.Editmode",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "com.studio23.s22.objectivesystem",
+        "com.studio23.ss2.inventorysystem",
+        "com.bdeshi.helpers"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
