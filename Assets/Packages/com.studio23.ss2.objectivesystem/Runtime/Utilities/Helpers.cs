@@ -31,7 +31,7 @@ namespace Studio23.SS2.ObjectiveSystem.Utilities
                 await inventory.LoadInventory();
             else
             {
-                Debug.LogWarning(inventory.InventoryName + ": no save file at path " + inventory.SavefilePath());
+                Debug.LogWarning($"{inventory.InventoryName}: no save file at path {inventory.SavefilePath()}");
             }
         }
         
@@ -60,7 +60,7 @@ namespace Studio23.SS2.ObjectiveSystem.Utilities
 
             foreach (var loadedItemData in loadedItemDatas)
             {
-                Debug.Log("loadedItemData.SOName = " + loadedItemData.SOName + ($"Inventory System/{inventory.InventoryName}/{loadedItemData.SOName}"));
+                Debug.Log($"loadedItemData.SOName = {loadedItemData.SOName}{($"Inventory System/{inventory.InventoryName}/{loadedItemData.SOName}")}");
             }
         }
     }

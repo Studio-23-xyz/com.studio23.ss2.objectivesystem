@@ -44,12 +44,12 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
             {
-                Debug.LogWarning("can't add task " + this + " because parent objective is not active and valid");
+                Debug.LogWarning($"can't add task {this} because parent objective is not active and valid");
                 return;
             }
             if(_state != ObjectiveTaskState.NotStarted)
             {
-                Debug.LogWarning("can't add task " + this + " because it has already started");
+                Debug.LogWarning($"can't add task {this} because it has already started");
                 return;
             }
             
@@ -62,12 +62,12 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
             {
-                Debug.LogWarning("can't remove task " + this + " because parent objective is not active and valid");
+                Debug.LogWarning($"can't remove task {this} because parent objective is not active and valid");
                 return;
             }
             if(_state == ObjectiveTaskState.NotStarted)
             {
-                Debug.LogWarning("can't remove task " + this + " because it hasn't been started");
+                Debug.LogWarning($"can't remove task {this} because it hasn't been started");
                 return;
             }
             _state = ObjectiveTaskState.NotStarted;
@@ -88,12 +88,12 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
             {
-                Debug.LogWarning("can't complete task " + this + " because parent objective is not active and valid");
+                Debug.LogWarning($"can't complete task {this} because parent objective is not active and valid");
                 return;
             }
             if(_state != ObjectiveTaskState.InProgress)
             {
-                Debug.LogWarning("can't complete task " + this + " because it isn't in progress");
+                Debug.LogWarning($"can't complete task {this} because it isn't in progress");
                 return;
             }
 
@@ -110,12 +110,12 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
             {
-                Debug.LogWarning("can't complete task " + this + " because parent objective is not active and valid");
+                Debug.LogWarning($"can't complete task {this} because parent objective is not active and valid");
                 return;
             }
             if(_state != ObjectiveTaskState.InProgress)
             {
-                Debug.LogWarning("can't complete task " + this + " because it isn't in progress");
+                Debug.LogWarning($"can't complete task {this} because it isn't in progress");
                 return;
             }
             
@@ -145,7 +145,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
         public override string ToString()
         {
-            return Name +" " +  _state;
+            return $"{Name} {_state}";
         }
     }
 }

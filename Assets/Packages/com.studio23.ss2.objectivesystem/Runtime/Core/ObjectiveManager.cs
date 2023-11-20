@@ -153,10 +153,10 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             //do not trust objective state unless it is in objectives
             //we allow starting any objective if it's not in objectives
             bool canStartObjective = !hadObjective || newObjective.CanStart;
-            DLog("start new objective request " + newObjective + hadObjective + canStartObjective, newObjective);
+            DLog($"start new objective request {newObjective}{hadObjective}{canStartObjective}", newObjective);
             if(!canStartObjective)
             {
-                Debug.LogWarning("can't start objective at state " + newObjective.State);
+                Debug.LogWarning($"can't start objective at state {newObjective.State}");
                 return;
             }
             
@@ -184,7 +184,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// </summary>
         /// <param name="objective"></param>
         public void EndObjective(ObjectiveBase objective) {
-            DLog("start new objective request " + objective, objective);
+            DLog($"start new objective request {objective}", objective);
             //do not trust objective state unless it is in objectives
             var hasItem = Objectives.HasItem(objective);
             var objectiveIsActive = objective.IsActive;
@@ -195,9 +195,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             else
             {
                 if(!hasItem)
-                    Debug.LogWarning("can't end objective " + objective + " that isn't in the objectives inventory");
+                    Debug.LogWarning($"can't end objective {objective} that isn't in the objectives inventory");
                 else
-                    Debug.LogWarning("can't end objective " + objective + " in state " + objective.State);
+                    Debug.LogWarning($"can't end objective {objective} in state {objective.State}");
             }
         }
         public void CompleteObjective(ObjectiveBase objective)
@@ -214,27 +214,27 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }else
             {
                 if(!hasItem)
-                    Debug.LogWarning("can't complete objective " + objective + " that isn't in the objectives inventory");
+                    Debug.LogWarning($"can't complete objective {objective} that isn't in the objectives inventory");
                 else
-                    Debug.LogWarning("can't complete objective " + objective + " in state " + objective.State);
+                    Debug.LogWarning($"can't complete objective {objective} in state {objective.State}");
             }
         }
         public void CancelObjectiveCompletion(ObjectiveBase objective)
         {
-            DLog("start new objective request " + objective, objective);
+            DLog($"start new objective request {objective}", objective);
             var hasItem = Objectives.HasItem(objective);
             var objectiveCanCancelCompletion = objective.CanCancelCompletion;
             if (hasItem && objectiveCanCancelCompletion)
             {
                 objective.HandleObjectiveCompletionCancel();
                 HandleActiveObjectiveCompletionUpdate(objective);
-                DLog("restarted existing objective" + objective, objective);
+                DLog($"restarted existing objective{objective}", objective);
             }else
             {
                 if(!hasItem)
-                    Debug.LogWarning("can't cancel objective " + objective + " that isn't in the objectives inventory");
+                    Debug.LogWarning($"can't cancel objective {objective} that isn't in the objectives inventory");
                 else
-                    Debug.LogWarning("can't cancel objective " + objective + " in state " + objective.State);
+                    Debug.LogWarning($"can't cancel objective {objective} in state {objective.State}");
             }
         }
 
@@ -275,7 +275,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             {
                 SelectNewBestObjective();
             }
-            DLog("removed new objective" + objective, objective);
+            DLog($"removed new objective{objective}", objective);
         }
 
         void ForceAddObjectiveToActives(ObjectiveBase newObjective)

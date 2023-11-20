@@ -39,7 +39,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
             {
-                Debug.LogWarning("can't add hint " + this + " because parent objective is not active and valid");
+                Debug.LogWarning($"can't add hint {this} because parent objective is not active and valid");
                 return;
             }
             SetActive(true);
@@ -55,7 +55,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
             {
-                Debug.LogWarning("can't remove hint " + this + " because parent objective is not active and valid");
+                Debug.LogWarning($"can't remove hint {this} because parent objective is not active and valid");
                 return;
             }
             SetActive(false);

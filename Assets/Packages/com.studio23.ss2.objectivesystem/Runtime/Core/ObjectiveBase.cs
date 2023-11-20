@@ -131,7 +131,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// </summary>
         public virtual void Initialize()
         {
-            Debug.Log(" init " + this);
+            Debug.Log($" init {this}");
             foreach (var hint in Hints)
             {
                 hint.SetObjective(this);
@@ -181,7 +181,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// </summary>
         public virtual void Cleanup()
         {
-            Debug.Log("cleanup " + this);
+            Debug.Log($"cleanup {this}");
             ActiveTasks.Clear();
             ActiveHints.Clear();
             
