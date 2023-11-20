@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 046e215ce6402724bab2ff4ff806dc0e, type: 3}
+  m_Name: Basic Objective 3
+  m_EditorClassIdentifier: 
+  Id: 
+  Name: Basic objective 3
+  Description: BAsic objective 3 Nadesco
+  _priority: 3
+  _tasks:
+  - {fileID: 11400000, guid: 01b72c0d985d9524e80b19b742261375, type: 2}
+  - {fileID: 11400000, guid: 6833af241de4cfb42b12d07fb82bbafd, type: 2}
+  - {fileID: 11400000, guid: 40cacaa57c05b8847945717de654996e, type: 2}
+  - {fileID: 11400000, guid: d6ace57317eec8f4ea7cb394b8e744d8, type: 2}
+  _activeTasks: []
+  _hints: []
+  _activeHints: []
