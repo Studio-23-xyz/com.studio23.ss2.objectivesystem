@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 046e215ce6402724bab2ff4ff806dc0e, type: 3}
+  m_Name: RGB Pillar objective
+  m_EditorClassIdentifier: 
+  Id: 
+  Name: 'RGB Pillar one by one objective '
+  Description: RGB Pillar one by one objective  desc
+  _priority: 0
+  _tasks:
+  - {fileID: 11400000, guid: 3efd22c244336e341960cd75e1e6f5fa, type: 2}
+  - {fileID: 11400000, guid: 85d592a142749414ca2d0b893cb7bb33, type: 2}
+  - {fileID: 11400000, guid: b4d395e4a8902e048a34bde900f4ade9, type: 2}
+  _activeTasks: []
+  _hints: []
+  _activeHints: []
