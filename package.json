@@ -1,0 +1,50 @@
+{
+    "name": "com.studio23.ss2.objectivesystem",
+    "version": "1.0.3",
+    "displayName": "Objective System",
+    "description": "Objective System that supports adding/removing objectives, objective task dependencies, hints.",
+    "unity": "2022.3",
+    "unityRelease": "10f1",
+    "documentationUrl": "https://openupm.com/packages/com.studio23.ss2.objectivesystem/",
+    "changelogUrl": "https://openupm.com/packages/com.studio23.ss2.objectivesystem/",
+    "licensesUrl": "https://opensource.org/license/mit/",
+    "scopedRegistries":  [
+      {
+        "name": "Studio 23",
+        "url": "https://package.openupm.com",
+        "scopes": [
+          "com.studio23.ss2"
+        ]
+      }], 
+    "dependencies": {
+        "com.bdeshi.helpers": "1.0.0",
+        "com.cysharp.unitask": "2.4.1",
+        "com.dbrizov.naughtyattributes": "2.1.4",
+        "com.unity.inputsystem": "1.7.0",
+        "com.unity.render-pipelines.high-definition": "14.0.8",
+        "com.unity.textmeshpro": "3.0.6",
+        "com.studio23.ss2.savesystem": "1.1.6",
+        "com.studio23.ss2.inventorysystem": "1.3.0"
+   },
+   "keywords": [
+      "Objective System",
+      "System"
+    ],
+  "samples": [
+      {
+        "displayName": "Functional Example",
+        "description": "Objective UI example scene + Some demo objective/hint/task scriptable objects",
+        "path": "Samples~/ObjectiveSystemDemo1"
+      }
+    ],  
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/Studio-23-xyz/objectivesystem.git"    
+    },
+    "license": "MIT",  
+    "author": {
+      "name": "Studio 23",
+      "email": "contact@studio-23.xyz",
+      "url": "https://studio-23.xyz"
+    }
+  }
