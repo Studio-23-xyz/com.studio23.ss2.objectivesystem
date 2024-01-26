@@ -1,6 +1,6 @@
 {
     "name": "com.studio23.ss2.objectivesystem",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "displayName": "Objective System",
     "description": "Objective System that supports adding/removing objectives, objective task dependencies, hints.",
     "unity": "2022.3",
@@ -39,7 +39,7 @@
     ],  
   "repository": {
       "type": "git",
-      "url": "https://github.com/Studio-23-xyz/objectivesystem.git"    
+      "url": "https://github.com/Studio-23-xyz/com.studio23.ss2.objectivesystem.git"    
     },
     "license": "MIT",  
     "author": {
