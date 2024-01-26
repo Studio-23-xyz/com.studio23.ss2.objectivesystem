@@ -1,6 +1,6 @@
 {
     "name": "com.studio23.ss2.objectivesystem",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "displayName": "Objective System",
     "description": "Objective System that supports adding/removing objectives, objective task dependencies, hints.",
     "unity": "2022.3",
@@ -34,12 +34,12 @@
       {
         "displayName": "Functional Example",
         "description": "Objective UI example scene + Some demo objective/hint/task scriptable objects",
-        "path": "Samples~/InteractionSystem23/demo1"
+        "path": "Samples~/ObjectiveSystemDemo1"
       }
     ],  
   "repository": {
       "type": "git",
-      "url": "https://github.com/Studio-23-xyz/interactionsystem23.git"    
+      "url": "https://github.com/Studio-23-xyz/objectivesystem.git"    
     },
     "license": "MIT",  
     "author": {
