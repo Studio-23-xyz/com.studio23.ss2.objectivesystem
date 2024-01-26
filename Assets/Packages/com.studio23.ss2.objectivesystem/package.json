@@ -34,7 +34,7 @@
       {
         "displayName": "Functional Example",
         "description": "Objective UI example scene + Some demo objective/hint/task scriptable objects",
-        "path": "Samples~/ObjectiveSystemDemo1/demo1"
+        "path": "Samples~/ObjectiveSystemDemo1"
       }
     ],  
   "repository": {
