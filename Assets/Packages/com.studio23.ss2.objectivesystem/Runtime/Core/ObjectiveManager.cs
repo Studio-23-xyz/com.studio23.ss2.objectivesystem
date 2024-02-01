@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
+using Newtonsoft.Json;
 using Studio23.SS2.InventorySystem.Core;
+using Studio23.SS2.InventorySystem.Data;
 using Studio23.SS2.ObjectiveSystem.Data;
 using Studio23.SS2.ObjectiveSystem.Utilities;
+using Studio23.SS2.SaveSystem.Interfaces;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Studio23.SS2.ObjectiveSystem.Core
 {
-    public class ObjectiveManager : TestMonoSingleton<ObjectiveManager>
+    public class ObjectiveManager : TestMonoSingleton<ObjectiveManager>, ISaveable
     {
         public InventoryBase<ObjectiveBase> Objectives { get; private set; }
         public InventoryBase<ObjectiveTask> Tasks { get; private set; }
@@ -21,6 +24,17 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [SerializeField] InputActionReference _selectedObjectiveChangeAction;
         [SerializeField] ObjectiveBase _selectedObjective;
         [SerializeField] int _selectedObjectiveIndex = 0;
+        
+        private bool _isDirty = true;
+        
+        //#TODO listen to objective events and set as true when any is modified.
+        public bool IsDirty { 
+            get => _isDirty;
+            set => _isDirty = value;
+        }
+
+        public string GetUniqueID() => "ObjectiveSystem";
+
         public ObjectiveBase SelectedObjective => _selectedObjective;
         /// <summary>
         /// Fired when selected objective switches to another one
@@ -79,7 +93,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             {
                 objective.Initialize();
                 SubToObjective(objective);
-                
+                Debug.Log("InitializeObjectives "+  objective + objective.IsActive);
                 if (objective.IsActive)
                 {
                     AddObjectiveToActives(objective);
@@ -490,10 +504,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             Debug.Log("SAVE");
 
-            await Hints.SaveInventory();
-            await Tasks.SaveInventory();
-
-            await Objectives.SaveInventory();
+            await SaveSystem.Core.SaveSystem.Instance.Save();
         }
 
         /// <summary>
@@ -504,6 +515,8 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [Button]
         async UniTask Reload()
         {
+            await SaveSystem.Core.SaveSystem.Instance.Load();
+
             foreach(var objective in Objectives.GetAll())
             {
                 objective.ObjectiveActivationToggled -= HandleObjectiveActivationToggle;
@@ -526,11 +539,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         async UniTask Load()
         {
             DLog("LOAD");
-            await Hints.SafeLoadInventory();
-            await Tasks.SafeLoadInventory();
-            await Objectives.SafeLoadInventory();
-            InitializeObjectives();
+            await SaveSystem.Core.SaveSystem.Instance.Load();
             
+            InitializeObjectives();
             HandleActiveObjectiveListUpdated();
             SelectNewBestObjective();
             Initialized = true;
@@ -539,12 +550,54 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [Button]
         void NukeSave()
         {
-            Hints.NukeSave();
-            Tasks.NukeSave();
-            Objectives.NukeSave();
+            Debug.Log("#TODO");
+            // Hints.NukeSave();
+            // Tasks.NukeSave();
+            // Objectives.NukeSave();
         }
 
         #endregion
 
+        public string GetSerializedData()
+        {
+            var s = JsonConvert.SerializeObject(new ObjectiveSystemSaveData(this));
+            Debug.Log(s);
+            return s;
+        }
+
+        public void AssignSerializedData(string data)
+        {
+            var saveData = JsonConvert.DeserializeObject<ObjectiveSystemSaveData>(data);
+            Hints.LoadInventoryData(saveData.HintsData);
+            Tasks.LoadInventoryData(saveData.TasksData);
+            Objectives.LoadInventoryData(saveData.ObjectivesData);
+            
+            InitializeObjectives();
+            HandleActiveObjectiveListUpdated();
+            SelectNewBestObjective();
+        }
+
+
+        [Serializable]
+        public class ObjectiveSystemSaveData
+        {
+            public List<ItemSaveData> HintsData;
+            public List<ItemSaveData> TasksData;
+            public List<ItemSaveData> ObjectivesData;
+
+            //This is called by jsonserializer
+            //necessary
+            public ObjectiveSystemSaveData()
+            {
+                
+            }
+
+            public ObjectiveSystemSaveData(ObjectiveManager objectiveManager)
+            {
+                HintsData = objectiveManager.Hints.GetInventorySaveData();
+                TasksData = objectiveManager.Tasks.GetInventorySaveData();
+                ObjectivesData = objectiveManager.Objectives.GetInventorySaveData();
+            }
+        }
     }
 }
