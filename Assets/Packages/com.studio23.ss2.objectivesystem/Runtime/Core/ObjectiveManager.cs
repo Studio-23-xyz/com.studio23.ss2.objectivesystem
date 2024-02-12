@@ -560,9 +560,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
         public string GetSerializedData()
         {
-            var s = JsonConvert.SerializeObject(new ObjectiveSystemSaveData(this));
-            Debug.Log(s);
-            return s;
+            return JsonConvert.SerializeObject(new ObjectiveSystemSaveData(this));
         }
 
         public void AssignSerializedData(string data)
