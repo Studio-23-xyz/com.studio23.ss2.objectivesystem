@@ -5,6 +5,10 @@ using Studio23.SS2.InventorySystem.Data;
 using Studio23.SS2.ObjectiveSystem.Data;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace Studio23.SS2.ObjectiveSystem.Core
 {
     [CreateAssetMenu(menuName = "Studio-23/Objective System/Task", fileName = "objective task")]
@@ -132,7 +136,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             OnTaskCompletionToggle = null;
             OnTaskActiveToggle = null;
         }
-
+# region save/load
         public override void AssignSerializedData(string data)
         {
             _state = JsonConvert.DeserializeObject<ObjectiveTaskState>(data);
@@ -142,6 +146,31 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             return JsonConvert.SerializeObject(_state);
         }
+# endregion
+#if UNITY_EDITOR
+        [Button]
+        public void Rename()
+        {
+            Rename(this.Name);
+        }
+        
+        public void Rename(string newName)
+        {
+            this.name = newName;
+            AssetDatabase.SaveAssets();
+            EditorUtility.SetDirty(this);
+        }
+        
+        [Button]
+        public void DestroyTask()
+        {
+            Undo.RecordObject(_parentObjective, "remove");
+            _parentObjective.Tasks.Remove(this);
+            EditorUtility.SetDirty(_parentObjective);
+            Undo.DestroyObjectImmediate(this);
+            AssetDatabase.SaveAssetIfDirty(_parentObjective);
+        }
+#endif
 
         public override string ToString()
         {

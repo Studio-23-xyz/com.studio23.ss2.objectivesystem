@@ -3,7 +3,10 @@ using NaughtyAttributes;
 using Newtonsoft.Json;
 using Studio23.SS2.InventorySystem.Data;
 using UnityEngine;
-using UnityEngine.Serialization;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Studio23.SS2.ObjectiveSystem.Core
 {
@@ -69,6 +72,37 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             return JsonConvert.SerializeObject(_isActive);
         }
+#if UNITY_EDITOR     
+        [Button]
+        public void Rename()
+        {
+            Rename(_parentObjective.getFullHintAssetName(Name));
+        }
+        
+                
+        [Button]
+        public void DestroyHint()
+        {
+            if (_parentObjective != null) 
+            {
+                Undo.RecordObject(_parentObjective, "Hint");
+                _parentObjective.Hints.Remove(this);
+            }
+
+            EditorUtility.SetDirty(_parentObjective);
+            Undo.DestroyObjectImmediate(this);
+            AssetDatabase.SaveAssetIfDirty(_parentObjective);
+        }
+        
+        
+        public void Rename(string newName)
+        {
+            this.name = newName;
+
+            AssetDatabase.SaveAssets();
+            EditorUtility.SetDirty(this);
+        }
+#endif
     }
 }
 
