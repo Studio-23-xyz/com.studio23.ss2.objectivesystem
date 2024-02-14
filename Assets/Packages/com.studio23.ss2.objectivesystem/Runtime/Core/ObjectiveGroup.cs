@@ -7,7 +7,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
     /// When we have multiple simultaneuous objectives,
     /// this can be used to start/end them en masse
     /// </summary>
-    [CreateAssetMenu(menuName = "Studio-23/Objective System/Basic Objective", fileName = "Basic Objective")]
+    [CreateAssetMenu(menuName = "Studio-23/Objective System/Objective Group", fileName = "Basic Objective")]
     public class ObjectiveGroup:ScriptableObject
     {
         [SerializeField]List<ObjectiveBase> _objectives;

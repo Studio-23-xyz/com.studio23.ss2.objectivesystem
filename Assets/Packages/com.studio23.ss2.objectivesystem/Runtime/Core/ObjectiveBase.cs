@@ -4,6 +4,9 @@ using NaughtyAttributes;
 using Newtonsoft.Json;
 using Studio23.SS2.InventorySystem.Data;
 using Studio23.SS2.ObjectiveSystem.Data;
+# if UNITY_EDITOR
+using UnityEditor;
+# endif
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -303,6 +306,51 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             ResetProgress();
         }
 
+        #region EDITOR
+        # if UNITY_EDITOR
+        
+  
+        [Button]
+        public void CreateAndAddTask()
+        {
+            var task = ScriptableObject.CreateInstance<ObjectiveTask>();
+            task.Name = (_tasks.Count + 1).ToString();
+            task.name = GetTaskFullAssetName(task.Name);
+            task.SetObjective(this);
+            _tasks.Add(task);
+
+            AssetDatabase.AddObjectToAsset(task, this);
+            AssetDatabase.SaveAssets();
+            EditorUtility.SetDirty(this);
+        }
+
+        public string GetTaskFullAssetName(string baseTaskName)
+        {
+            return $"{name}_task_{baseTaskName}";
+        }
+
+        [Button]
+        public void CreateAndAddHint()
+        {
+            var hint = ScriptableObject.CreateInstance<ObjectiveHint>();
+            hint.Name = (_hints.Count + 1).ToString();
+            hint.name = getFullHintAssetName(hint.Name);
+            _hints.Add(hint);
+            hint.SetObjective(this);
+
+            AssetDatabase.AddObjectToAsset(hint, this);
+            AssetDatabase.SaveAssets();
+            EditorUtility.SetDirty(this);
+        }
+
+        public string getFullHintAssetName(string hintBaseName)
+        {
+            return $"{name}_hint_{hintBaseName}";
+        }
+#endif
+        #endregion
+
+        #region Save/Load
 
         public override void AssignSerializedData(string data)
         {
@@ -313,9 +361,10 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             return JsonConvert.SerializeObject(_state);
         }
 
+        #endregion
+
         public override string ToString()
         {
-
             return $"{name} {_state}";
         }
     }
