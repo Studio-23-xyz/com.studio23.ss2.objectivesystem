@@ -1,4 +1,5 @@
 ﻿using System;
+using BDeshi.Logging;
 using NaughtyAttributes;
 using Newtonsoft.Json;
 using Studio23.SS2.InventorySystem.Data;
@@ -12,7 +13,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 {
     [CreateAssetMenu(menuName = "Studio-23/Objective System/Hint", fileName = "objective Hint")]
     [Serializable]
-    public class ObjectiveHint: ItemBase
+    public class ObjectiveHint: ItemBase, ISubCategoryLoggerMixin<ObjectiveLogCategory>
     {
         [SerializeField] ObjectiveBase _parentObjective;
         public ObjectiveBase ParentObjective => _parentObjective;
@@ -42,7 +43,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
             {
-                Debug.LogWarning($"can't add hint {this} because parent objective is not active and valid");
+                Logger.LogWarning(ObjectiveLogCategory.Hint,$"can't add hint {this} because parent objective is not active and valid");
                 return;
             }
             SetActive(true);
@@ -58,9 +59,11 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
             {
-                Debug.LogWarning($"can't remove hint {this} because parent objective is not active and valid");
+                Logger.LogWarning(ObjectiveLogCategory.Hint,$"can't remove hint {this} because parent objective is not active and valid");
                 return;
             }
+            Logger.Log(ObjectiveLogCategory.Hint,$"Remove Hint {this} ", this);
+
             SetActive(false);
         }
         public override void AssignSerializedData(string data)
@@ -78,7 +81,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             Rename(_parentObjective.getFullHintAssetName(Name));
         }
-        
                 
         [Button]
         public void DestroyHint()
@@ -103,6 +105,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             EditorUtility.SetDirty(this);
         }
 #endif
+        public GameObject gameObject => ObjectiveManager.Instance.gameObject;
+        public ICategoryLogger<ObjectiveLogCategory> Logger => ObjectiveManager.Instance.Logger;
+        public ObjectiveLogCategory Category => ObjectiveLogCategory.Hint;
     }
 }
 
