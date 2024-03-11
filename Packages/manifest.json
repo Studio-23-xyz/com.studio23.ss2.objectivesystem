@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "com.bdeshi.helpers": "2.0.0",
+    "com.bdeshi.categorylogger": "1.0.9",
+    "com.bdeshi.helpers": "2.0.4",
     "com.cysharp.unitask": "2.4.1",
     "com.dbrizov.naughtyattributes": "2.1.4",
     "com.jeffjadulco.guidregenerator": "https://github.com/jeffjadulco/unity-guid-regenerator.git",
@@ -43,7 +44,7 @@
       "scopes": [
         "com.studio23.ss2",
         "com.cysharp.unitask",
-        "com.bdeshi.helpers",
+        "com.bdeshi",
         "com.dbrizov.naughtyattributes"
       ]
     }

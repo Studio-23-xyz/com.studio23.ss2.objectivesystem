@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BDeshi.Logging;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using Newtonsoft.Json;
@@ -49,9 +50,10 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public event Action<ObjectiveHint> OnActiveObjectiveHintToggled;
         public event Action<ObjectiveTask> OnActiveObjectiveTaskAdded;
         public event Action<ObjectiveTask> OnActiveObjectiveTaskRemoved;
-
-        public bool IsDebug = false;
         public bool Initialized { get; private set; } = false;
+
+        public ICategoryLogger<ObjectiveLogCategory> Logger => _logger;
+        [SerializeField] SerializableCategoryLogger<ObjectiveLogCategory> _logger = new ((ObjectiveLogCategory)(~0));
 
         public bool InstanceValid => Instance != null;
 
@@ -93,7 +95,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             {
                 objective.Initialize();
                 SubToObjective(objective);
-                Debug.Log("InitializeObjectives "+  objective + objective.IsActive);
                 if (objective.IsActive)
                 {
                     AddObjectiveToActives(objective);
@@ -167,10 +168,11 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             //do not trust objective state unless it is in objectives
             //we allow starting any objective if it's not in objectives
             bool canStartObjective = !hadObjective || newObjective.CanStart;
-            DLog($"start new objective request {newObjective}{hadObjective}{canStartObjective}", newObjective);
+            Logger.Log(ObjectiveLogCategory.ObjectiveStart, 
+                $"start new objective request {newObjective}{hadObjective}{canStartObjective}", newObjective);
             if(!canStartObjective)
             {
-                Debug.LogWarning($"can't start objective at state {newObjective.State}");
+                Logger.LogWarning(ObjectiveLogCategory.ObjectiveStart, $"can't start objective at state {newObjective.State}");
                 return;
             }
             
@@ -187,7 +189,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
             if (!hadObjective || newObjective.CanStart)
             {
-                
                 newObjective.UpdateActiveHintsAndTasks();
             }
             ForceAddObjectiveToActives(newObjective);
@@ -198,20 +199,20 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// </summary>
         /// <param name="objective"></param>
         public void EndObjective(ObjectiveBase objective) {
-            DLog($"start new objective request {objective}", objective);
             //do not trust objective state unless it is in objectives
             var hasItem = Objectives.HasItem(objective);
             var objectiveIsActive = objective.IsActive;
             if (hasItem && objectiveIsActive)
             {
+                Logger.Log(ObjectiveLogCategory.ObjectiveEnd,$"End  objective {objective}", objective);
                 RemoveObjectiveFromActives(objective);
             }
             else
             {
                 if(!hasItem)
-                    Debug.LogWarning($"can't end objective {objective} that isn't in the objectives inventory");
+                    Logger.LogWarning(ObjectiveLogCategory.ObjectiveEnd,$"can't end objective {objective} that isn't in the objectives inventory");
                 else
-                    Debug.LogWarning($"can't end objective {objective} in state {objective.State}");
+                    Logger.LogWarning(ObjectiveLogCategory.ObjectiveEnd,$"can't end objective {objective} in state {objective.State}");
             }
         }
         public void CompleteObjective(ObjectiveBase objective)
@@ -223,32 +224,33 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             {
                 objective.HandleObjectiveCompletion();
                 HandleActiveObjectiveListUpdated();
+                Logger.Log(ObjectiveLogCategory.ObjectiveComplete,$"End  objective {objective}", objective);
 
                 OnActiveObjectiveListUpdated?.Invoke();
             }else
             {
                 if(!hasItem)
-                    Debug.LogWarning($"can't complete objective {objective} that isn't in the objectives inventory");
+                    Logger.LogWarning(ObjectiveLogCategory.ObjectiveComplete,$"can't complete objective {objective} that isn't in the objectives inventory");
                 else
-                    Debug.LogWarning($"can't complete objective {objective} in state {objective.State}");
+                    Logger.LogWarning(ObjectiveLogCategory.ObjectiveComplete,$"can't complete objective {objective} in state {objective.State}");
             }
         }
         public void CancelObjectiveCompletion(ObjectiveBase objective)
         {
-            DLog($"start new objective request {objective}", objective);
+            Logger.Log(ObjectiveLogCategory.ObjectiveCancel, $"complete new objective request {objective}", objective);
             var hasItem = Objectives.HasItem(objective);
             var objectiveCanCancelCompletion = objective.CanCancelCompletion;
             if (hasItem && objectiveCanCancelCompletion)
             {
                 objective.HandleObjectiveCompletionCancel();
                 HandleActiveObjectiveCompletionUpdate(objective);
-                DLog($"restarted existing objective{objective}", objective);
+                Logger.Log(ObjectiveLogCategory.ObjectiveCancel, $"restarted existing objective{objective}", objective);
             }else
             {
                 if(!hasItem)
-                    Debug.LogWarning($"can't cancel objective {objective} that isn't in the objectives inventory");
+                    Logger.LogWarning(ObjectiveLogCategory.ObjectiveCancel, $"can't cancel objective {objective} that isn't in the objectives inventory");
                 else
-                    Debug.LogWarning($"can't cancel objective {objective} in state {objective.State}");
+                    Logger.LogWarning(ObjectiveLogCategory.ObjectiveCancel, $"can't cancel objective {objective} in state {objective.State}");
             }
         }
 
@@ -289,7 +291,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             {
                 SelectNewBestObjective();
             }
-            DLog($"removed new objective{objective}", objective);
         }
 
         void ForceAddObjectiveToActives(ObjectiveBase newObjective)
@@ -307,15 +308,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             OnActiveObjectiveListUpdated?.Invoke();
         }
 
-
-        [HideInCallstack]
-        public void DLog(string msg, UnityEngine.Object ctx = null)
-        {
-            if (IsDebug)
-            {
-                Debug.Log(msg, ctx);
-            }
-        }
         private void HandleActiveObjectiveCompletionUpdate(ObjectiveBase objective)
         {
             HandleActiveObjectiveListUpdated();
@@ -333,7 +325,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             //#TODO this should be moved elsewhere where it isn't invoked every time the list is modified
             ActiveObjectives.Sort(CompareActiveObjectives);
-            //DLog("SortActiveObjectives ");
             OnActiveObjectiveListUpdated?.Invoke();
         }
 
@@ -538,7 +529,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// </summary>
         async UniTask Load()
         {
-            DLog("LOAD");
+            Logger.Log(ObjectiveLogCategory.Initialization,"LOAD");
             await SaveSystem.Core.SaveSystem.Instance.Load();
             
             InitializeObjectives();
@@ -597,5 +588,17 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 ObjectivesData = objectiveManager.Objectives.GetInventorySaveData();
             }
         }
+    }
+
+    [Flags]
+    public enum ObjectiveLogCategory
+    {
+        Initialization = 1 << 0,
+        ObjectiveStart = 1 << 1,
+        ObjectiveEnd = 1 << 2,
+        ObjectiveComplete = 1 << 3,
+        ObjectiveCancel= 1 << 4,
+        Task =  1 << 5,
+        Hint =1 << 6,
     }
 }
