@@ -7,7 +7,7 @@
     "unityRelease": "10f1",
     "documentationUrl": "https://openupm.com/packages/com.studio23.ss2.objectivesystem/",
     "changelogUrl": "https://openupm.com/packages/com.studio23.ss2.objectivesystem/",
-    "licensesUrl": "https://opensource.org/license/mit/",
+    "licensesUrl": "https://studio-23-xyz.github.io/com.studio23.ss2.objectivesystem/license/LICENSE.html",
     "scopedRegistries":  [
       {
         "name": "Studio 23",
@@ -40,7 +40,6 @@
       "type": "git",
       "url": "https://github.com/Studio-23-xyz/com.studio23.ss2.objectivesystem.git"    
     },
-    "license": "MIT",  
     "author": {
       "name": "Studio 23",
       "email": "contact@studio-23.xyz",
