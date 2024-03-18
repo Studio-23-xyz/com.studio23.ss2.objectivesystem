@@ -1,6 +1,6 @@
 {
     "name": "com.studio23.ss2.objectivesystem",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "displayName": "Objective System",
     "description": "Objective System that supports adding/removing objectives, objective task dependencies, hints.",
     "unity": "2022.3",
@@ -22,7 +22,7 @@
         "com.dbrizov.naughtyattributes": "2.1.4",
         "com.unity.inputsystem": "1.7.0",
         "com.unity.textmeshpro": "3.0.6",
-        "com.studio23.ss2.savesystem": "1.1.6",
+        "com.studio23.ss2.savesystem": "2.0.6",
         "com.studio23.ss2.inventorysystem": "1.3.0"
    },
    "keywords": [
