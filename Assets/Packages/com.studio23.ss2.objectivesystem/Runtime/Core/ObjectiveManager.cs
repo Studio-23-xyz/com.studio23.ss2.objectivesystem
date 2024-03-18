@@ -561,13 +561,13 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             Tasks.LoadInventoryData(saveData.TasksData);
             Objectives.LoadInventoryData(saveData.ObjectivesData);
             
-            //TODO wait if necessary
+            //TODO await if necessary
 
             InitializeObjectives();
             HandleActiveObjectiveListUpdated();
             SelectNewBestObjective();
 
-            await UniTask.Yield();
+            await UniTask.CompletedTask;
         }
 
 
