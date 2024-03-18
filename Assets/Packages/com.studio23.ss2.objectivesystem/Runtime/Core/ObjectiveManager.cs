@@ -549,21 +549,25 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
         #endregion
 
-        public string GetSerializedData()
+        public UniTask<string> GetSerializedData()
         {
-            return JsonConvert.SerializeObject(new ObjectiveSystemSaveData(this));
+            return new UniTask<string>(JsonConvert.SerializeObject(new ObjectiveSystemSaveData(this)));
         }
 
-        public void AssignSerializedData(string data)
+        public async UniTask AssignSerializedData(string data)
         {
             var saveData = JsonConvert.DeserializeObject<ObjectiveSystemSaveData>(data);
             Hints.LoadInventoryData(saveData.HintsData);
             Tasks.LoadInventoryData(saveData.TasksData);
             Objectives.LoadInventoryData(saveData.ObjectivesData);
             
+            //TODO await if necessary
+
             InitializeObjectives();
             HandleActiveObjectiveListUpdated();
             SelectNewBestObjective();
+
+            await UniTask.CompletedTask;
         }
 
 
