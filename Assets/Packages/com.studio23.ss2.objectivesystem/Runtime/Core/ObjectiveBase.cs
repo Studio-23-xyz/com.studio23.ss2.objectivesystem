@@ -36,8 +36,10 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [SerializeField] int _priority = 0;
         public int Priority => _priority;
 
+        public bool AddAllTasksAutomatically = false;
         [Expandable]
         [SerializeField] protected List<ObjectiveTask> _tasks;
+        
         public List<ObjectiveTask> Tasks => _tasks;
         [SerializeField] protected List<ObjectiveTask> _activeTasks;
         public List<ObjectiveTask> ActiveTasks => _activeTasks;
@@ -107,6 +109,13 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public void StartObjective()
         {
             ObjectiveManager.Instance.StartObjective(this);
+            if (AddAllTasksAutomatically)
+            {
+                foreach (var task in _tasks)
+                {
+                    task.AddTask();
+                }
+            }
         }
         [ShowIf("ObjectiveManagerExists")]
         [Button]
@@ -129,6 +138,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             ObjectiveManager.Instance.CancelObjectiveCompletion(this);
         }
+        
         /// <summary>
         /// Needs to be called manually. should be called once
         /// </summary>
