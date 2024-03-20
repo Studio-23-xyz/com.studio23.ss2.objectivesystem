@@ -43,8 +43,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         }
 
     
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+[Button(enabledMode:EButtonEnableMode.Playmode)]
         public void AddTask()
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
@@ -62,8 +61,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             _state = ObjectiveTaskState.InProgress;
             OnTaskActiveToggle?.Invoke(this);
         }
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+[Button(enabledMode:EButtonEnableMode.Playmode)]
         public void RemoveTask()
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
@@ -82,16 +80,14 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             OnTaskActiveToggle?.Invoke(this);
             OnTaskCompletionToggle?.Invoke(this);
         }
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+[Button(enabledMode:EButtonEnableMode.Playmode)]
         public void ResetProgress()
         {
             _state = ObjectiveTaskState.NotStarted;
             OnTaskActiveToggle?.Invoke(this);
             OnTaskCompletionToggle?.Invoke(this);
         }
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+[Button(enabledMode:EButtonEnableMode.Playmode)]
         public void CompleteTask()
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))

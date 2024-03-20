@@ -33,7 +33,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             get => _isDirty;
             set => _isDirty = value;
         }
-
+        public bool HasLoadedFromSave = false;
+        public bool RequireLoadForInitialize = true;
+        public bool FullyInitialized => !RequireLoadForInitialize || HasLoadedFromSave;
         public string GetUniqueID() => "ObjectiveSystem";
 
         public ObjectiveBase SelectedObjective => _selectedObjective;
@@ -50,16 +52,13 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public event Action<ObjectiveHint> OnActiveObjectiveHintToggled;
         public event Action<ObjectiveTask> OnActiveObjectiveTaskAdded;
         public event Action<ObjectiveTask> OnActiveObjectiveTaskRemoved;
-        public bool Initialized { get; private set; } = false;
 
         public ICategoryLogger<ObjectiveLogCategory> Logger => _logger;
         [SerializeField] SerializableCategoryLogger<ObjectiveLogCategory> _logger = new ((ObjectiveLogCategory)(~0));
 
-        public bool InstanceValid => Instance != null;
-
         protected override void Initialize()
         {
-            Initialized = false;
+            HasLoadedFromSave = false;
             CreateInventories();
             _activeObjectives = new List<ObjectiveBase>();
         }
@@ -70,22 +69,13 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             Hints = new InventoryBase<ObjectiveHint>("Hints");
             Tasks = new InventoryBase<ObjectiveTask>("Tasks");
         }
-
-        private async void Start()
+        
+        public async UniTask WaitForInitialization()
         {
-            if (!WillGetDestroyed)
-            {
-                //we need to wait for savesytem singleton to be up.
-                //hence, call load() afterwards
-                await Load();
-            }
-        }
-
-        public async UniTask AwaitInitialization()
-        {
-            while (!ObjectiveManager.Instance.Initialized)
+            while (!FullyInitialized)
             {
                 await UniTask.Yield();
+                await UniTask.NextFrame();
             }
         }
 
@@ -99,7 +89,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 {
                     AddObjectiveToActives(objective);
                 }
-            }
+            }  
             
             HandleActiveObjectiveListUpdated();
         }
@@ -110,11 +100,17 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             objective.OnObjectiveTaskAdded += HandleObjectiveTaskAdded;
             objective.OnObjectiveTaskRemoved += HandleObjectiveTaskRemoved;
             objective.OnObjectiveHintUpdate += HandleObjectiveHintToggle;
-            objective.ObjectiveActivationToggled += HandleObjectiveActivationToggle;
         }
+        public void HandleObjectiveActivationToggle(ObjectiveBase objectiveBase) => HandleObjectiveActivationToggleTask(objectiveBase).Forget();
+        public void HandleObjectiveTaskAdded(ObjectiveTask objectiveTask) => HandleObjectiveTaskAddedTask(objectiveTask).Forget();
+        public void HandleObjectiveTaskRemoved(ObjectiveTask objectiveTask) => HandleObjectiveTaskRemovedTask(objectiveTask).Forget();
+        public void HandleObjectiveHintToggle(ObjectiveHint objectiveHint) => HandleObjectiveHintToggleTask(objectiveHint).Forget();
+        
+        
 
-        private void HandleObjectiveHintToggle(ObjectiveHint objectiveHint)
+        private async UniTask HandleObjectiveHintToggleTask(ObjectiveHint objectiveHint)
         {
+            if (!FullyInitialized) await WaitForInitialization();
             if (objectiveHint.IsActive)
             {
                 Hints.AddItemUnique(objectiveHint);
@@ -130,8 +126,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
         }
 
-        private void HandleObjectiveTaskRemoved(ObjectiveTask task)
+        private async UniTask HandleObjectiveTaskRemovedTask(ObjectiveTask task)
         {
+            if (!FullyInitialized) await WaitForInitialization();
             Tasks.RemoveItem(task);
             if (task.ParentObjective == _selectedObjective)
             {
@@ -139,8 +136,10 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
         }
 
-        private void HandleObjectiveTaskAdded(ObjectiveTask task)
+        private async UniTask HandleObjectiveTaskAddedTask(ObjectiveTask task)
         {
+            if (!FullyInitialized) await WaitForInitialization();
+            Logger.Log(ObjectiveLogCategory.Task, $"task {task} added", task);
             Tasks.AddItemUnique(task);
             if (task.ParentObjective == _selectedObjective)
             {
@@ -149,8 +148,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         }
 
 
-        private void HandleObjectiveActivationToggle(ObjectiveBase objective)
+        private async UniTask HandleObjectiveActivationToggleTask(ObjectiveBase objective)
         {
+            if (!FullyInitialized) await WaitForInitialization();
             if (objective.IsActive)
             {
                 AddObjectiveToActives(objective);
@@ -161,9 +161,12 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
         }
 
+        public void StartObjective(ObjectiveBase newObjective) => StartObjectiveTask(newObjective).Forget();
 
-        public void StartObjective(ObjectiveBase newObjective) {
-
+        public async UniTask StartObjectiveTask(ObjectiveBase newObjective)
+        {
+            if (!FullyInitialized) await WaitForInitialization();
+            
             bool hadObjective = Objectives.HasItem(newObjective);
             //do not trust objective state unless it is in objectives
             //we allow starting any objective if it's not in objectives
@@ -183,22 +186,28 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 // otherwise, we can trust it's state. 
                 // If it's not started, reset tasks and hints
                 newObjective.ResetProgress();
-                newObjective.Initialize();
-                Objectives.AddItem(newObjective);
-                SubToObjective(newObjective);
+                InitializeObjective(newObjective);
             }
-            if (!hadObjective || newObjective.CanStart)
-            {
-                newObjective.UpdateActiveHintsAndTasks();
-            }
+            newObjective.UpdateActiveHintsAndTasks();
             ForceAddObjectiveToActives(newObjective);
             newObjective.HandleObjectiveStarted();
         }
+
+        private void InitializeObjective(ObjectiveBase newObjective)
+        {
+            newObjective.Initialize();
+            Objectives.AddItem(newObjective);
+            SubToObjective(newObjective);
+        }
+
+        public void EndObjective(ObjectiveBase objective) => EndObjectiveTask(objective).Forget();
         /// <summary>
         /// This removes the objective from active list and marks it as cancelled or finished based on completion
         /// </summary>
         /// <param name="objective"></param>
-        public void EndObjective(ObjectiveBase objective) {
+        public async UniTask EndObjectiveTask(ObjectiveBase objective) {
+            if (!FullyInitialized) await WaitForInitialization();
+
             //do not trust objective state unless it is in objectives
             var hasItem = Objectives.HasItem(objective);
             var objectiveIsActive = objective.IsActive;
@@ -215,8 +224,13 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                     Logger.LogWarning(ObjectiveLogCategory.ObjectiveEnd,$"can't end objective {objective} in state {objective.State}");
             }
         }
-        public void CompleteObjective(ObjectiveBase objective)
+        
+        public void CompleteObjective(ObjectiveBase objective) => CompleteObjectiveTask(objective).Forget();
+
+        public async UniTask CompleteObjectiveTask(ObjectiveBase objective)
         {
+            if (!FullyInitialized) await WaitForInitialization();
+
             var hasItem = Objectives.HasItem(objective);
             var canComplete = objective.CanComplete;
             
@@ -235,8 +249,12 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                     Logger.LogWarning(ObjectiveLogCategory.ObjectiveComplete,$"can't complete objective {objective} in state {objective.State}");
             }
         }
-        public void CancelObjectiveCompletion(ObjectiveBase objective)
+        public void CancelObjectiveCompletion(ObjectiveBase objective) =>CancelObjectiveCompletionTask(objective).Forget();
+
+        public async UniTask CancelObjectiveCompletionTask(ObjectiveBase objective)
         {
+            if (!FullyInitialized) await WaitForInitialization();
+
             Logger.Log(ObjectiveLogCategory.ObjectiveCancel, $"complete new objective request {objective}", objective);
             var hasItem = Objectives.HasItem(objective);
             var objectiveCanCancelCompletion = objective.CanCancelCompletion;
@@ -345,18 +363,8 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             // hence 1:-1
             return objective1.IsCompleted ? 1 : -1;
         }
-        [ShowIf("InstanceValid")]
-        [Button]
-        public void PrintAllActiveObjectives() {
-            Debug.Log("active objectives:");
-            foreach (ObjectiveBase objective in ActiveObjectives)
-            {
-                Debug.Log(objective, objective);
-            }
-        }
-        
-        [ShowIf("InstanceValid")]
-        [Button]
+
+        [ContextMenu("PrintAllT")]
         public void PrintAllObjectives() {
             Debug.Log("Objectives:");
             foreach (ObjectiveBase objective in Objectives.GetAll())
@@ -371,7 +379,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             _selectedObjectiveChangeAction.action.actionMap.Enable();
 
             _selectedObjectiveChangeAction.action.performed += HandleSelectedObjectiveChangeAction;
-            if (!Initialized)
+            if (!FullyInitialized)
             {
                 InitializeObjectives();
             }
@@ -399,7 +407,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             objective.OnObjectiveTaskAdded -= HandleObjectiveTaskAdded;
             objective.OnObjectiveTaskRemoved -= HandleObjectiveTaskRemoved;
             objective.OnObjectiveHintUpdate -= HandleObjectiveHintToggle;
-            objective.ObjectiveActivationToggled -= HandleObjectiveActivationToggle;
         }
 
         private void HandleSelectedObjectiveChangeAction(InputAction.CallbackContext context)
@@ -484,30 +491,54 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
             SetSelectedIndex(newIndex);
         }
-        
-        
 
-        #region Save/Load
-
-        [ShowIf("InstanceValid")]
-        [Button]
-        async UniTask Save()
+        [ContextMenu("PRINT Tasks")]
+        public void PrintTasks()
         {
-            Debug.Log("SAVE");
-
-            await SaveSystem.Core.SaveSystem.Instance.Save();
+            Debug.Log("Printing Tasks");
+            foreach (var task in Tasks.GetAll())
+            {
+                Debug.Log($"task: {task}", task);
+            }
+        }
+        [ContextMenu("PRINT Hints")]
+        public void PrintHints()
+        {
+            Debug.Log("Printing Hints");
+            foreach (var hint in Hints.GetAll())
+            {
+                Debug.Log($"hint: {hint}", hint);
+            }
         }
 
-        /// <summary>
-        /// do cleanup and  relaod objectives from save
-        /// for initial load use load()
-        /// </summary>
-        [ShowIf("InstanceValid")]
-        [Button]
-        async UniTask Reload()
+        #region Save/Load
+        public UniTask<string> GetSerializedData()
         {
-            await SaveSystem.Core.SaveSystem.Instance.Load();
+            return new UniTask<string>(JsonConvert.SerializeObject(new ObjectiveSystemSaveData(this)));
+        }
 
+        public async UniTask AssignSerializedData(string data)
+        {
+            CleanupObjectives();
+            var saveData = JsonConvert.DeserializeObject<ObjectiveSystemSaveData>(data);
+            Hints.LoadInventoryData(saveData.HintsData);
+            Tasks.LoadInventoryData(saveData.TasksData);
+            Objectives.LoadInventoryData(saveData.ObjectivesData);
+            
+            //TODO await if necessary
+
+
+            await UniTask.Yield(); await UniTask.NextFrame();
+            InitializeObjectives();
+            await UniTask.Yield(); await UniTask.NextFrame();
+            HandleActiveObjectiveListUpdated();
+            await UniTask.Yield(); await UniTask.NextFrame();
+            SelectNewBestObjective();
+            await UniTask.CompletedTask;
+            HasLoadedFromSave = true;
+        }
+        private void CleanupObjectives()
+        {
             foreach(var objective in Objectives.GetAll())
             {
                 objective.ObjectiveActivationToggled -= HandleObjectiveActivationToggle;
@@ -516,61 +547,12 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 objective.OnObjectiveHintUpdate -= HandleObjectiveHintToggle;
                 objective.ObjectiveActivationToggled -= HandleObjectiveActivationToggle;
                 UnsubFromObjective(objective);
+                
+                objective.Reset();
             }
-            CreateInventories();
-            _activeObjectives.Clear();
-            
-            await Load();
-
-        }
-        /// <summary>
-        /// Load from save
-        /// use reload() when already loaded.
-        /// </summary>
-        async UniTask Load()
-        {
-            Logger.Log(ObjectiveLogCategory.Initialization,"LOAD");
-            await SaveSystem.Core.SaveSystem.Instance.Load();
-            
-            InitializeObjectives();
-            HandleActiveObjectiveListUpdated();
-            SelectNewBestObjective();
-            Initialized = true;
-        }
-        [ShowIf("InstanceValid")]
-        [Button]
-        void NukeSave()
-        {
-            Debug.Log("#TODO");
-            // Hints.NukeSave();
-            // Tasks.NukeSave();
-            // Objectives.NukeSave();
         }
 
         #endregion
-
-        public UniTask<string> GetSerializedData()
-        {
-            return new UniTask<string>(JsonConvert.SerializeObject(new ObjectiveSystemSaveData(this)));
-        }
-
-        public async UniTask AssignSerializedData(string data)
-        {
-            var saveData = JsonConvert.DeserializeObject<ObjectiveSystemSaveData>(data);
-            Hints.LoadInventoryData(saveData.HintsData);
-            Tasks.LoadInventoryData(saveData.TasksData);
-            Objectives.LoadInventoryData(saveData.ObjectivesData);
-            
-            //TODO await if necessary
-
-            InitializeObjectives();
-            HandleActiveObjectiveListUpdated();
-            SelectNewBestObjective();
-
-            await UniTask.CompletedTask;
-        }
-
-
         [Serializable]
         public class ObjectiveSystemSaveData
         {

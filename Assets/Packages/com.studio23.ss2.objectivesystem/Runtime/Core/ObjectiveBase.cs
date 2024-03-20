@@ -63,9 +63,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public event Action<ObjectiveHint> OnObjectiveHintUpdate;
         public event Action<ObjectiveTask> OnObjectiveTaskAdded;
         public event Action<ObjectiveTask> OnObjectiveTaskRemoved;
-
-        public bool ObjectiveManagerExists => ObjectiveManager.Instance != null;
-
+        
         internal virtual void HandleObjectiveStarted()
         {
             _state = ObjectiveState.InProgress;
@@ -100,12 +98,11 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         internal virtual void HandleObjectiveCompletion()
         {
             _state = ObjectiveState.Complete;
-            Debug.Log(_state);
+
             OnObjectiveCompletionUpdated?.Invoke(this);
         }
         
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+        [Button(enabledMode:EButtonEnableMode.Playmode)]
         public void StartObjective()
         {
             ObjectiveManager.Instance.StartObjective(this);
@@ -117,23 +114,19 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 }
             }
         }
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+        [Button(enabledMode:EButtonEnableMode.Playmode)]
         public void EndObjective()
         {
             ObjectiveManager.Instance.EndObjective(this);
         }
         
-        
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+        [Button(enabledMode:EButtonEnableMode.Playmode)]
         public void CompleteObjective()
         {
             ObjectiveManager.Instance.CompleteObjective(this);
         }
-        
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+
+        [Button(enabledMode:EButtonEnableMode.Playmode)]
         public void CancelObjectiveCompletion()
         {
             ObjectiveManager.Instance.CancelObjectiveCompletion(this);
@@ -290,8 +283,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
             OnObjectiveHintUpdate?.Invoke(puzzleObjectiveHint);
         }
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+[Button(enabledMode:EButtonEnableMode.Playmode)]
         internal void ResetProgress()
         {
             _state = ObjectiveState.NotStarted;
@@ -312,6 +304,13 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             _tasks.Clear();
             _activeTasks.Clear();
             _hints.Clear();
+            _activeHints.Clear();
+            ResetProgress();
+        }
+        
+        public void Reset()
+        {
+            _activeTasks.Clear();
             _activeHints.Clear();
             ResetProgress();
         }

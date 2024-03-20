@@ -37,8 +37,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             _isActive = shouldBeActive;
             OnHintActivationToggled?.Invoke(this);
         }
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+[Button(enabledMode:EButtonEnableMode.Playmode)]
         public void Add()
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
@@ -53,8 +52,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             Remove();
         }
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+[Button(enabledMode:EButtonEnableMode.Playmode)]
         public void Remove()
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))

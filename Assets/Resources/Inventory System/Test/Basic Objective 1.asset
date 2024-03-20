@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6472568764585892328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd3b8f454a2eba24db34c079813f5a43, type: 3}
+  m_Name: Basic Objective 1_hint_2
+  m_EditorClassIdentifier: 
+  Id: 
+  Name: 22222222222
+  Description: 22222222222
+  _parentObjective: {fileID: 11400000}
+  _priority: 0
+--- !u!114 &-4701100619224494536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56f872340cd7e0248be1620bf619aec3, type: 3}
+  m_Name: Basic Objective 1_task_1
+  m_EditorClassIdentifier: 
+  Id: 
+  Name: 1zzzzzzzzzzzzzz
+  Description: 1zzzzzzzzzzzzzz
+  _parentObjective: {fileID: 11400000}
+  _priority: 0
+  CompleteParentObjectiveOnCompletion: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 551b05fef304dea4b8f1daac821e4740, type: 3}
+  m_Name: Basic Objective 1
+  m_EditorClassIdentifier: 
+  Id: 
+  Name: Basic Objective 1111
+  Description: Basic Objective 1111 Desco Elysium
+  _priority: 1
+  AddAllTasksAutomatically: 0
+  _tasks:
+  - {fileID: -4701100619224494536}
+  - {fileID: 1435567674614773017}
+  _activeTasks: []
+  _hints:
+  - {fileID: 1104231851565007142}
+  - {fileID: -6472568764585892328}
+  _activeHints: []
+--- !u!114 &1104231851565007142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd3b8f454a2eba24db34c079813f5a43, type: 3}
+  m_Name: Basic Objective 1_hint_1
+  m_EditorClassIdentifier: 
+  Id: 
+  Name: 1111111111
+  Description: 1111111111
+  _parentObjective: {fileID: 11400000}
+  _priority: 0
+--- !u!114 &1435567674614773017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56f872340cd7e0248be1620bf619aec3, type: 3}
+  m_Name: Basic Objective 1_task_2
+  m_EditorClassIdentifier: 
+  Id: 
+  Name: 2ffffffffffffffffffffff
+  Description: 2ffffffffffffffffffffff
+  _parentObjective: {fileID: 11400000}
+  _priority: 0
+  CompleteParentObjectiveOnCompletion: 0
