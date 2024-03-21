@@ -23,7 +23,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         // This is manually serialized when saved as needed.
         [ShowNonSerializedField]
         private ObjectiveTaskState _state;
+
         [SerializeField] int _priority;
+        public bool InitiallyActive;
         public int Priority => _priority;
         public ObjectiveBase ParentObjective => _parentObjective;
         [ShowNativeProperty]
@@ -129,7 +131,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [Button]
         public void Rename()
         {
-            Rename(this.Name);
+            Rename(this.Name +"__"+ _parentObjective.name);
         }
         
         public void Rename(string newName)

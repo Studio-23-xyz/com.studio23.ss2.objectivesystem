@@ -9,7 +9,7 @@ public class ResourceTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foo();
+        // foo();
     }
     [ContextMenu("foo")]
     [Button]

@@ -46,14 +46,13 @@
       "url": "https://package.openupm.com"
     },
     "com.studio23.ss2.inventorysystem": {
-      "version": "2.0.0",
+      "version": "file:C:/Users/BS656/Documents/GitHub/Inventory-System/Assets/Packages/com.studio23.ss2.inventorysystem",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
+      "source": "local",
+      "dependencies": {}
     },
     "com.studio23.ss2.savesystem": {
-      "version": "2.0.6",
+      "version": "2.1.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {

@@ -36,7 +36,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [SerializeField] int _priority = 0;
         public int Priority => _priority;
 
-        public bool AddAllTasksAutomatically = false;
         [Expandable]
         [SerializeField] protected List<ObjectiveTask> _tasks;
         
@@ -106,9 +105,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public void StartObjective()
         {
             ObjectiveManager.Instance.StartObjective(this);
-            if (AddAllTasksAutomatically)
+            foreach (var task in _tasks)
             {
-                foreach (var task in _tasks)
+                if (task.InitiallyActive)
                 {
                     task.AddTask();
                 }
@@ -307,7 +306,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             _activeHints.Clear();
             ResetProgress();
         }
-        
+        [Button]
         public void Reset()
         {
             _activeTasks.Clear();
@@ -363,11 +362,24 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
         public override void AssignSerializedData(string data)
         {
-            _state = JsonConvert.DeserializeObject<ObjectiveState>(data);
+            var saveData = JsonConvert.DeserializeObject<ObjectiveSaveData>(data);
+            _state = saveData.ObjectiveState;
+
+            for (int i = 0; i < _tasks.Count; i++)
+            {
+                _tasks[i].AssignSerializedData(saveData.TaskStates[i]);
+            }
+            
+            for (int i = 0; i < _hints.Count; i++)
+            {
+                _hints[i].AssignSerializedData(saveData.HintStates[i]);
+            }
+            
+            OnObjectiveCompletionUpdated?.Invoke(this);
         }
 
         public override string GetSerializedData() {
-            return JsonConvert.SerializeObject(_state);
+            return JsonConvert.SerializeObject(new ObjectiveSaveData(this));
         }
 
         #endregion
@@ -375,6 +387,35 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public override string ToString()
         {
             return $"{name} {_state}";
+        }
+
+        [Serializable]
+        public class ObjectiveSaveData
+        {
+            public ObjectiveState ObjectiveState;
+            public List<string> TaskStates;
+            public List<string> HintStates;
+
+            //needed for serialize
+            public ObjectiveSaveData()
+            {
+            }
+
+            public ObjectiveSaveData(ObjectiveBase objectiveBase)
+            {
+                ObjectiveState = objectiveBase._state;
+                TaskStates = new ();
+                foreach (var task in objectiveBase.Tasks)
+                {
+                    TaskStates.Add(task.GetSerializedData());
+                }
+
+                HintStates = new();
+                foreach (var objectiveHint in objectiveBase.Hints)
+                {
+                    HintStates.Add(objectiveHint.GetSerializedData());
+                }
+            }
         }
     }
 }

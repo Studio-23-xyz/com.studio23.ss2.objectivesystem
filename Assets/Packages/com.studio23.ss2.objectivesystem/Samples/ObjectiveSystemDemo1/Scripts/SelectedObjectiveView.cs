@@ -47,12 +47,7 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
         {
             ObjectiveManager.Instance.SelectedObjectiveChanged += LoadObjectiveData;
             ObjectiveManager.Instance.SelectedObjectiveUpdated += LoadObjectiveData;
-            
-            while (!ObjectiveManager.Instance.FullyInitialized)
-            {
-                await UniTask.Yield();
-            }
-
+ 
             LoadObjectiveData();
         }
 

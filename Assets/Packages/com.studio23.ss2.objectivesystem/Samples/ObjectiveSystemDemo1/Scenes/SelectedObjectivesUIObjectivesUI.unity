@@ -174,7 +174,8 @@ MonoBehaviour:
   EnterEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: b4d395e4a8902e048a34bde900f4ade9, type: 2}
+      - m_Target: {fileID: 8210050081350634112, guid: 745f587f4db45b34bb6eff2262efe128,
+          type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
           com.studio23.s22.objectivesystem
         m_MethodName: CompleteTask
@@ -993,43 +994,13 @@ GameObject:
   m_Component:
   - component: {fileID: 131772376}
   - component: {fileID: 131772375}
-  - component: {fileID: 131772374}
   m_Layer: 0
   m_Name: Objective 1 one by one multi objective Setup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &131772374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 131772373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ff9f108bc1042469789c873586a8295, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _objective: {fileID: 11400000, guid: 107bbddec3ebafb42bed820551c04999, type: 2}
-  ObjectiveCompletedEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: d56648c2f7ce3ab4e8eb51515e382251, type: 2}
-        m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveBase,
-          com.studio23.s22.objectivesystem
-        m_MethodName: EndObjective
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  m_IsActive: 1
 --- !u!114 &131772375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1064,19 +1035,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: f9e5c7e9a23e66f4e8867a48abf89856, type: 2}
-        m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
-          com.studio23.s22.objectivesystem
-        m_MethodName: AddTask
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 11400000, guid: ea0e3d9b7fba38a49924c9fbac970ed2, type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveBase,
           com.studio23.s22.objectivesystem
@@ -1090,36 +1048,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 63888bd111bed804496fcf4268b8438b, type: 2}
-        m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
-          com.studio23.s22.objectivesystem
-        m_MethodName: AddTask
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 11400000, guid: 856da13c627eaa44da4a84367a8c1898, type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveBase,
           com.studio23.s22.objectivesystem
         m_MethodName: StartObjective
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: ef7076cdd6c03e24d892c32be2b96da2, type: 2}
-        m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
-          com.studio23.s22.objectivesystem
-        m_MethodName: AddTask
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1576,7 +1508,8 @@ MonoBehaviour:
   EnterEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 85d592a142749414ca2d0b893cb7bb33, type: 2}
+      - m_Target: {fileID: 4699969478662630589, guid: 745f587f4db45b34bb6eff2262efe128,
+          type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
           com.studio23.s22.objectivesystem
         m_MethodName: CompleteTask
@@ -1698,11 +1631,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aecafdc92c914f82a0ec3d403212ab70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _task: {fileID: 11400000, guid: 85d592a142749414ca2d0b893cb7bb33, type: 2}
+  _task: {fileID: 4699969478662630589, guid: 745f587f4db45b34bb6eff2262efe128, type: 2}
   TaskCompletedEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: b4d395e4a8902e048a34bde900f4ade9, type: 2}
+      - m_Target: {fileID: 8210050081350634112, guid: 745f587f4db45b34bb6eff2262efe128,
+          type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
           com.studio23.s22.objectivesystem
         m_MethodName: AddTask
@@ -2347,7 +2281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &951183460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2373,45 +2307,6 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveBase,
           com.studio23.s22.objectivesystem
         m_MethodName: StartObjective
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 6f5d189ed6e19c84ba4a7690b430fce0, type: 2}
-        m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
-          com.studio23.s22.objectivesystem
-        m_MethodName: AddTask
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: a9fb97dcba52ec143b4a57efd5847cc7, type: 2}
-        m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
-          com.studio23.s22.objectivesystem
-        m_MethodName: AddTask
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 853084c40733a534caa35a07089b9b22, type: 2}
-        m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
-          com.studio23.s22.objectivesystem
-        m_MethodName: AddTask
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2625,7 +2520,8 @@ MonoBehaviour:
   EnterEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 3efd22c244336e341960cd75e1e6f5fa, type: 2}
+      - m_Target: {fileID: -2995360505242265908, guid: 745f587f4db45b34bb6eff2262efe128,
+          type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
           com.studio23.s22.objectivesystem
         m_MethodName: CompleteTask
@@ -2747,11 +2643,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aecafdc92c914f82a0ec3d403212ab70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _task: {fileID: 11400000, guid: 3efd22c244336e341960cd75e1e6f5fa, type: 2}
+  _task: {fileID: -2995360505242265908, guid: 745f587f4db45b34bb6eff2262efe128, type: 2}
   TaskCompletedEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 85d592a142749414ca2d0b893cb7bb33, type: 2}
+      - m_Target: {fileID: 4699969478662630589, guid: 745f587f4db45b34bb6eff2262efe128,
+          type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
           com.studio23.s22.objectivesystem
         m_MethodName: AddTask
@@ -3253,7 +3150,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 3efd22c244336e341960cd75e1e6f5fa, type: 2}
+      - m_Target: {fileID: -2995360505242265908, guid: 745f587f4db45b34bb6eff2262efe128,
+          type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
           com.studio23.s22.objectivesystem
         m_MethodName: AddTask
@@ -3601,7 +3499,8 @@ MonoBehaviour:
   EnterEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 853084c40733a534caa35a07089b9b22, type: 2}
+      - m_Target: {fileID: 236292553577853002, guid: 107bbddec3ebafb42bed820551c04999,
+          type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
           com.studio23.s22.objectivesystem
         m_MethodName: CompleteTask
@@ -3762,7 +3661,8 @@ MonoBehaviour:
   EnterEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: a9fb97dcba52ec143b4a57efd5847cc7, type: 2}
+      - m_Target: {fileID: -7438365586305501437, guid: 107bbddec3ebafb42bed820551c04999,
+          type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
           com.studio23.s22.objectivesystem
         m_MethodName: CompleteTask
@@ -4253,7 +4153,8 @@ MonoBehaviour:
   EnterEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 6f5d189ed6e19c84ba4a7690b430fce0, type: 2}
+      - m_Target: {fileID: -3549868458147429879, guid: 107bbddec3ebafb42bed820551c04999,
+          type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveTask,
           com.studio23.s22.objectivesystem
         m_MethodName: CompleteTask

@@ -17,9 +17,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
     public class ObjectiveManager : TestMonoSingleton<ObjectiveManager>, ISaveable
     {
         public InventoryBase<ObjectiveBase> Objectives { get; private set; }
-        public InventoryBase<ObjectiveTask> Tasks { get; private set; }
-        public InventoryBase<ObjectiveHint> Hints { get; private set; }
-        [SerializeField] List<ObjectiveBase> _activeObjectives;
+        [Expandable, SerializeField] List<ObjectiveBase> _activeObjectives;
         public List<ObjectiveBase> ActiveObjectives => _activeObjectives;
 
         [SerializeField] InputActionReference _selectedObjectiveChangeAction;
@@ -33,9 +31,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             get => _isDirty;
             set => _isDirty = value;
         }
-        public bool HasLoadedFromSave = false;
-        public bool RequireLoadForInitialize = true;
-        public bool FullyInitialized => !RequireLoadForInitialize || HasLoadedFromSave;
         public string GetUniqueID() => "ObjectiveSystem";
 
         public ObjectiveBase SelectedObjective => _selectedObjective;
@@ -58,26 +53,17 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
         protected override void Initialize()
         {
-            HasLoadedFromSave = false;
             CreateInventories();
             _activeObjectives = new List<ObjectiveBase>();
         }
 
         private void CreateInventories()
         {
+            //we assume they will be nested under the objective asset
+            //so the names are 
             Objectives = new InventoryBase<ObjectiveBase>("Objectives");
-            Hints = new InventoryBase<ObjectiveHint>("Hints");
-            Tasks = new InventoryBase<ObjectiveTask>("Tasks");
         }
-        
-        public async UniTask WaitForInitialization()
-        {
-            while (!FullyInitialized)
-            {
-                await UniTask.Yield();
-                await UniTask.NextFrame();
-            }
-        }
+
 
         private void InitializeObjectives()
         {
@@ -87,6 +73,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 SubToObjective(objective);
                 if (objective.IsActive)
                 {
+                    Debug.Log($"{objective.State} Objective added to active {objective} ", objective);
                     AddObjectiveToActives(objective);
                 }
             }  
@@ -101,56 +88,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             objective.OnObjectiveTaskRemoved += HandleObjectiveTaskRemoved;
             objective.OnObjectiveHintUpdate += HandleObjectiveHintToggle;
         }
-        public void HandleObjectiveActivationToggle(ObjectiveBase objectiveBase) => HandleObjectiveActivationToggleTask(objectiveBase).Forget();
-        public void HandleObjectiveTaskAdded(ObjectiveTask objectiveTask) => HandleObjectiveTaskAddedTask(objectiveTask).Forget();
-        public void HandleObjectiveTaskRemoved(ObjectiveTask objectiveTask) => HandleObjectiveTaskRemovedTask(objectiveTask).Forget();
-        public void HandleObjectiveHintToggle(ObjectiveHint objectiveHint) => HandleObjectiveHintToggleTask(objectiveHint).Forget();
-        
-        
-
-        private async UniTask HandleObjectiveHintToggleTask(ObjectiveHint objectiveHint)
-        {
-            if (!FullyInitialized) await WaitForInitialization();
-            if (objectiveHint.IsActive)
-            {
-                Hints.AddItemUnique(objectiveHint);
-            }
-            else
-            {
-                Hints.RemoveItem(objectiveHint);
-            }
-
-            if (objectiveHint.ParentObjective == _selectedObjective)
-            {
-                HandleSelectedObjectiveUpdates(_selectedObjective);
-            }
-        }
-
-        private async UniTask HandleObjectiveTaskRemovedTask(ObjectiveTask task)
-        {
-            if (!FullyInitialized) await WaitForInitialization();
-            Tasks.RemoveItem(task);
-            if (task.ParentObjective == _selectedObjective)
-            {
-                HandleSelectedObjectiveUpdates(_selectedObjective);
-            }
-        }
-
-        private async UniTask HandleObjectiveTaskAddedTask(ObjectiveTask task)
-        {
-            if (!FullyInitialized) await WaitForInitialization();
-            Logger.Log(ObjectiveLogCategory.Task, $"task {task} added", task);
-            Tasks.AddItemUnique(task);
-            if (task.ParentObjective == _selectedObjective)
-            {
-                HandleSelectedObjectiveUpdates(_selectedObjective);
-            }
-        }
-
-
-        private async UniTask HandleObjectiveActivationToggleTask(ObjectiveBase objective)
-        {
-            if (!FullyInitialized) await WaitForInitialization();
+        public void HandleObjectiveActivationToggle(ObjectiveBase objective){
             if (objective.IsActive)
             {
                 AddObjectiveToActives(objective);
@@ -160,13 +98,28 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 RemoveObjectiveFromActives(objective);
             }
         }
-
-        public void StartObjective(ObjectiveBase newObjective) => StartObjectiveTask(newObjective).Forget();
-
-        public async UniTask StartObjectiveTask(ObjectiveBase newObjective)
+        public void HandleObjectiveTaskAdded(ObjectiveTask task){
+            if (task.ParentObjective == _selectedObjective)
+            {
+                HandleSelectedObjectiveUpdates(_selectedObjective);
+            }
+        }
+        public void HandleObjectiveTaskRemoved(ObjectiveTask task)
         {
-            if (!FullyInitialized) await WaitForInitialization();
-            
+            Logger.Log(ObjectiveLogCategory.Task, $"task {task} added", task);
+            if (task.ParentObjective == _selectedObjective)
+            {
+                HandleSelectedObjectiveUpdates(_selectedObjective);
+            }
+        }
+
+        public void HandleObjectiveHintToggle(ObjectiveHint objectiveHint){
+            if (objectiveHint.ParentObjective == _selectedObjective)
+            {
+                HandleSelectedObjectiveUpdates(_selectedObjective);
+            }
+        }
+        public void StartObjective(ObjectiveBase newObjective){
             bool hadObjective = Objectives.HasItem(newObjective);
             //do not trust objective state unless it is in objectives
             //we allow starting any objective if it's not in objectives
@@ -200,14 +153,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             SubToObjective(newObjective);
         }
 
-        public void EndObjective(ObjectiveBase objective) => EndObjectiveTask(objective).Forget();
-        /// <summary>
-        /// This removes the objective from active list and marks it as cancelled or finished based on completion
-        /// </summary>
-        /// <param name="objective"></param>
-        public async UniTask EndObjectiveTask(ObjectiveBase objective) {
-            if (!FullyInitialized) await WaitForInitialization();
-
+        public void EndObjective(ObjectiveBase objective){
             //do not trust objective state unless it is in objectives
             var hasItem = Objectives.HasItem(objective);
             var objectiveIsActive = objective.IsActive;
@@ -225,12 +171,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
         }
         
-        public void CompleteObjective(ObjectiveBase objective) => CompleteObjectiveTask(objective).Forget();
-
-        public async UniTask CompleteObjectiveTask(ObjectiveBase objective)
-        {
-            if (!FullyInitialized) await WaitForInitialization();
-
+        public void CompleteObjective(ObjectiveBase objective) {
             var hasItem = Objectives.HasItem(objective);
             var canComplete = objective.CanComplete;
             
@@ -249,12 +190,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                     Logger.LogWarning(ObjectiveLogCategory.ObjectiveComplete,$"can't complete objective {objective} in state {objective.State}");
             }
         }
-        public void CancelObjectiveCompletion(ObjectiveBase objective) =>CancelObjectiveCompletionTask(objective).Forget();
-
-        public async UniTask CancelObjectiveCompletionTask(ObjectiveBase objective)
-        {
-            if (!FullyInitialized) await WaitForInitialization();
-
+        public void CancelObjectiveCompletion(ObjectiveBase objective){
             Logger.Log(ObjectiveLogCategory.ObjectiveCancel, $"complete new objective request {objective}", objective);
             var hasItem = Objectives.HasItem(objective);
             var objectiveCanCancelCompletion = objective.CanCancelCompletion;
@@ -377,12 +313,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             //#TODO move this elsewhere
             _selectedObjectiveChangeAction.action.actionMap.Enable();
-
             _selectedObjectiveChangeAction.action.performed += HandleSelectedObjectiveChangeAction;
-            if (!FullyInitialized)
-            {
-                InitializeObjectives();
-            }
         }
 
 
@@ -496,18 +427,25 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public void PrintTasks()
         {
             Debug.Log("Printing Tasks");
-            foreach (var task in Tasks.GetAll())
+            foreach (var objective in Objectives.GetAll())
             {
-                Debug.Log($"task: {task}", task);
+                foreach (var task in objective.Tasks)
+                {
+                    Debug.Log($"task: {task}", task);
+                }
             }
+            
         }
         [ContextMenu("PRINT Hints")]
         public void PrintHints()
         {
             Debug.Log("Printing Hints");
-            foreach (var hint in Hints.GetAll())
+            foreach (var objective in Objectives.GetAll())
             {
-                Debug.Log($"hint: {hint}", hint);
+                foreach (var hint in objective.Hints)
+                {
+                    Debug.Log($"hint: {hint}", hint);
+                }
             }
         }
 
@@ -520,22 +458,17 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public async UniTask AssignSerializedData(string data)
         {
             CleanupObjectives();
+            Debug.Log("assign " + data);
             var saveData = JsonConvert.DeserializeObject<ObjectiveSystemSaveData>(data);
-            Hints.LoadInventoryData(saveData.HintsData);
-            Tasks.LoadInventoryData(saveData.TasksData);
+            Debug.Log("assignsavedata " + saveData);
             Objectives.LoadInventoryData(saveData.ObjectivesData);
             
             //TODO await if necessary
 
-
-            await UniTask.Yield(); await UniTask.NextFrame();
             InitializeObjectives();
-            await UniTask.Yield(); await UniTask.NextFrame();
             HandleActiveObjectiveListUpdated();
-            await UniTask.Yield(); await UniTask.NextFrame();
             SelectNewBestObjective();
             await UniTask.CompletedTask;
-            HasLoadedFromSave = true;
         }
         private void CleanupObjectives()
         {
@@ -551,13 +484,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 objective.Reset();
             }
         }
-
-        #endregion
         [Serializable]
         public class ObjectiveSystemSaveData
         {
-            public List<ItemSaveData> HintsData;
-            public List<ItemSaveData> TasksData;
             public List<ItemSaveData> ObjectivesData;
 
             //This is called by jsonserializer
@@ -569,11 +498,11 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
             public ObjectiveSystemSaveData(ObjectiveManager objectiveManager)
             {
-                HintsData = objectiveManager.Hints.GetInventorySaveData();
-                TasksData = objectiveManager.Tasks.GetInventorySaveData();
                 ObjectivesData = objectiveManager.Objectives.GetInventorySaveData();
             }
         }
+        #endregion
+        
     }
 
     [Flags]

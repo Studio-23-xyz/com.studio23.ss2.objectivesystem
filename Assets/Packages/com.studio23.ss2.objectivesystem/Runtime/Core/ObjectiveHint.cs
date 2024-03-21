@@ -52,7 +52,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             Remove();
         }
-[Button(enabledMode:EButtonEnableMode.Playmode)]
         public void Remove()
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
@@ -62,8 +61,14 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
             Logger.Log(ObjectiveLogCategory.Hint,$"Remove Hint {this} ", this);
 
+            Reset();
+        }
+        [Button(enabledMode:EButtonEnableMode.Playmode)]
+        private void Reset()
+        {
             SetActive(false);
         }
+
         public override void AssignSerializedData(string data)
         {
             _isActive = JsonConvert.DeserializeObject<bool>(data);

@@ -1,5 +1,7 @@
 using System;
 using Bdeshi.Helpers.Utility;
+using Studio23.SS2.ObjectiveSystem.Core;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +15,16 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
         {
             _allObjectiveUIToggleAction.action.performed += HandleObjectiveUIToggled;
             
+        }
+
+        private void Start()
+        {
+            var o = Resources.LoadAll<ObjectiveBase>("Inventory System/Objectives");
+            Debug.Log($"o {o.Length}");
+            var t = Resources.LoadAll<ObjectiveTask>("Inventory System/Objectives");
+            Debug.Log($"o {t.Length}");
+            var h  = Resources.LoadAll<ObjectiveHint>("Inventory System/Objectives");
+            Debug.Log($"o {h.Length}");
         }
 
         private void HandleObjectiveUIToggled(InputAction.CallbackContext obj)
