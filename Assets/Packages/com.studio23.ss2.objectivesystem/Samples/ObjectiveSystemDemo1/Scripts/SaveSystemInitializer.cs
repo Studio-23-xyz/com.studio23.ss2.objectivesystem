@@ -23,6 +23,5 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
                 SaveSystem.Core.SaveSystem.Instance.Load();
             }
         }
-
     }
 }

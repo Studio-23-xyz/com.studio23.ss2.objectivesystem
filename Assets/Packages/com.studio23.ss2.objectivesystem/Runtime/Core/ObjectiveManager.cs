@@ -461,15 +461,11 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
         public async UniTask AssignSerializedData(string data)
         {
-            CleanupObjectives();
             _activeObjectives.Clear();
-            Debug.Log("assign " + data);
+            CleanupObjectives();
+            
             var saveData = JsonConvert.DeserializeObject<ObjectiveSystemSaveData>(data);
-            Debug.Log("assignsavedata " + saveData);
             Objectives.LoadInventoryData(saveData.ObjectivesData);
-
-
-            //TODO await if necessary
 
             InitializeObjectives();
             HandleActiveObjectiveListUpdated();
