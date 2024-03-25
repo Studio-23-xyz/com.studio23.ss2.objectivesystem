@@ -1,7 +1,6 @@
 using System;
 using Bdeshi.Helpers.Utility;
 using Studio23.SS2.ObjectiveSystem.Core;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

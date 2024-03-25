@@ -211,7 +211,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                     _activeTasks.Add(task);
                     OnObjectiveTaskAdded?.Invoke(task);
                 }
-
             }
             else
             {

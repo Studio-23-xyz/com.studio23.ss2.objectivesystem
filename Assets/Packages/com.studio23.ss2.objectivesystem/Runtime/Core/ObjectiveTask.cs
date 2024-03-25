@@ -108,7 +108,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             OnTaskCompletionToggle?.Invoke(this);
         }
 
-
         public void FullReset()
         {
             ResetProgress();
