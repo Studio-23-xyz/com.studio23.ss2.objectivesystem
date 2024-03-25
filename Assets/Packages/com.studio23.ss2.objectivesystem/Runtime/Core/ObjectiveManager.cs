@@ -17,6 +17,8 @@ namespace Studio23.SS2.ObjectiveSystem.Core
     public class ObjectiveManager : TestMonoSingleton<ObjectiveManager>, ISaveable
     {
         public InventoryBase<ObjectiveBase> Objectives { get; private set; }
+        public InventoryBase<ObjectiveBase> Tasks { get; private set; }
+        public InventoryBase<ObjectiveBase> Hints { get; private set; }
         [Expandable, SerializeField] List<ObjectiveBase> _activeObjectives;
         public List<ObjectiveBase> ActiveObjectives => _activeObjectives;
 
@@ -62,6 +64,8 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             //we assume they will be nested under the objective asset
             //so the names are 
             Objectives = new InventoryBase<ObjectiveBase>("Objectives");
+            Tasks = new InventoryBase<ObjectiveBase>("Tasks");
+            Hints = new InventoryBase<ObjectiveBase>("Hints");
         }
 
 
@@ -458,11 +462,13 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public async UniTask AssignSerializedData(string data)
         {
             CleanupObjectives();
+            _activeObjectives.Clear();
             Debug.Log("assign " + data);
             var saveData = JsonConvert.DeserializeObject<ObjectiveSystemSaveData>(data);
             Debug.Log("assignsavedata " + saveData);
             Objectives.LoadInventoryData(saveData.ObjectivesData);
-            
+
+
             //TODO await if necessary
 
             InitializeObjectives();

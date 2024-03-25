@@ -1000,7 +1000,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &131772375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1014,12 +1014,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnableEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  DisableEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  StartEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: d56648c2f7ce3ab4e8eb51515e382251, type: 2}
@@ -1061,6 +1055,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  DisableEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  StartEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &131772376
 Transform:
   m_ObjectHideFlags: 0
@@ -1880,8 +1880,6 @@ MonoBehaviour:
     type: 3}
   _selectedObjective: {fileID: 0}
   _selectedObjectiveIndex: 0
-  HasLoadedFromSave: 0
-  RequireLoadForInitialize: 1
   _logger:
     Flags: -1
     MinLogPriority: 1
@@ -2296,12 +2294,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnableEvent:
     m_PersistentCalls:
-      m_Calls: []
-  DisableEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  StartEvent:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 107bbddec3ebafb42bed820551c04999, type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveBase,
@@ -2316,6 +2308,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  DisableEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  StartEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &951183461
 Transform:
   m_ObjectHideFlags: 0
@@ -3130,12 +3128,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnableEvent:
     m_PersistentCalls:
-      m_Calls: []
-  DisableEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  StartEvent:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 745f587f4db45b34bb6eff2262efe128, type: 2}
         m_TargetAssemblyTypeName: Studio23.SS2.ObjectiveSystem.Core.ObjectiveBase,
@@ -3164,6 +3156,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  DisableEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  StartEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1656697563
 Transform:
   m_ObjectHideFlags: 0

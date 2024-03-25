@@ -206,13 +206,20 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (task.IsActive)
             {
-                _activeTasks.Add(task);
-                OnObjectiveTaskAdded?.Invoke(task);
+                if (!_activeTasks.Contains(task))
+                {
+                    _activeTasks.Add(task);
+                    OnObjectiveTaskAdded?.Invoke(task);
+                }
+
             }
             else
             {
-                _activeTasks.Remove(task);
-                OnObjectiveTaskRemoved?.Invoke(task);
+                if (_activeTasks.Contains(task))
+                {
+                    _activeTasks.Remove(task);
+                    OnObjectiveTaskRemoved?.Invoke(task);
+                }
             }
         }
 
