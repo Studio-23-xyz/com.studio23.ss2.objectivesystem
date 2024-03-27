@@ -457,9 +457,8 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
         public async UniTask AssignSerializedData(string data)
         {
-            _activeObjectives.Clear();
-            CleanupObjectives();
-            
+            ClearAllObjectives();
+
             var saveData = JsonConvert.DeserializeObject<ObjectiveSystemSaveData>(data);
             Objectives.LoadInventoryData(saveData.ObjectivesData);
 
@@ -468,6 +467,13 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             SelectNewBestObjective();
             await UniTask.CompletedTask;
         }
+
+        public void ClearAllObjectives()
+        {
+            _activeObjectives.Clear();
+            CleanupObjectives();
+        }
+
         private void CleanupObjectives()
         {
             foreach(var objective in Objectives.GetAll())
