@@ -1,6 +1,6 @@
 {
     "name": "com.studio23.ss2.objectivesystem",
-    "version": "1.0.10",
+    "version": "1.0.11",
     "displayName": "Objective System",
     "description": "Objective System that supports adding/removing objectives, objective task dependencies, hints.",
     "unity": "2022.3",
