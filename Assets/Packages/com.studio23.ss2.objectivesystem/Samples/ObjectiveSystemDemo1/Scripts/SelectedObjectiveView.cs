@@ -47,12 +47,7 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
         {
             ObjectiveManager.Instance.SelectedObjectiveChanged += LoadObjectiveData;
             ObjectiveManager.Instance.SelectedObjectiveUpdated += LoadObjectiveData;
-            
-            while (!ObjectiveManager.Instance.Initialized)
-            {
-                await UniTask.Yield();
-            }
-
+ 
             LoadObjectiveData();
         }
 
@@ -70,7 +65,7 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
         }
         public void LoadObjectiveData(ObjectiveBase objective)
         {
-            Debug.Log("selected objective changed");
+            Debug.Log($"selected objective changed {objective}");
             if(objective == null)
             {
                 gameObject.SetActive(false);
@@ -82,7 +77,6 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
             if (objective.IsCompleted)
                 _objectiveTitleTMP.text = $"<s>{_objectiveTitleTMP.text}</s>";
             _objectiveDescTMP.text = objective.ObjectiveUIDesc;
- 
 
             _sortedTasks.Clear();
             _sortedTasks.AddRange(objective.ActiveTasks);

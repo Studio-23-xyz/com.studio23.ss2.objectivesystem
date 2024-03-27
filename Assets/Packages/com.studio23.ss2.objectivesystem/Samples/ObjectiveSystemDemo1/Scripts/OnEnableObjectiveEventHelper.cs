@@ -19,19 +19,16 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
             //this weird singleton waiting is due to savemanager dependency
             //realistically, this is never a problem in normal gameplay
             //because the singletons will be loaded properly by the time most events are fired
-            await ObjectiveManager.Instance.AwaitInitialization();
             EnableEvent.Invoke();
         }
 
         private async void OnDisable()
         {
-            await ObjectiveManager.Instance.AwaitInitialization();
             DisableEvent.Invoke();
         }
 
         private async void Start()
         {
-            await ObjectiveManager.Instance.AwaitInitialization();
             StartEvent.Invoke();
         }
     }

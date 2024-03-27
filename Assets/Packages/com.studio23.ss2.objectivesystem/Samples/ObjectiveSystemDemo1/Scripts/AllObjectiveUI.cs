@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Bdeshi.Helpers.Utility;
+using NaughtyAttributes;
 using Studio23.SS2.ObjectiveSystem.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,6 +45,7 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
             ObjectiveManager.Instance.OnActiveObjectiveTaskRemoved -= LoadObjectives;
             ObjectiveManager.Instance.OnActiveObjectiveHintToggled -= LoadObjectives;
         }
+        [Button]
         public void LoadObjectives()
         {
             var objectives = ObjectiveManager.Instance.ActiveObjectives;

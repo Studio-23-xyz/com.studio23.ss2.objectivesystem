@@ -38,6 +38,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
         [Expandable]
         [SerializeField] protected List<ObjectiveTask> _tasks;
+        
         public List<ObjectiveTask> Tasks => _tasks;
         [SerializeField] protected List<ObjectiveTask> _activeTasks;
         public List<ObjectiveTask> ActiveTasks => _activeTasks;
@@ -61,9 +62,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public event Action<ObjectiveHint> OnObjectiveHintUpdate;
         public event Action<ObjectiveTask> OnObjectiveTaskAdded;
         public event Action<ObjectiveTask> OnObjectiveTaskRemoved;
-
-        public bool ObjectiveManagerExists => ObjectiveManager.Instance != null;
-
+        
         internal virtual void HandleObjectiveStarted()
         {
             _state = ObjectiveState.InProgress;
@@ -98,37 +97,40 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         internal virtual void HandleObjectiveCompletion()
         {
             _state = ObjectiveState.Complete;
-            Debug.Log(_state);
+
             OnObjectiveCompletionUpdated?.Invoke(this);
         }
         
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+        [Button(enabledMode:EButtonEnableMode.Playmode)]
         public void StartObjective()
         {
             ObjectiveManager.Instance.StartObjective(this);
+            foreach (var task in _tasks)
+            {
+                if (task.InitiallyActive)
+                {
+                    task.AddTask();
+                }
+            }
         }
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+        [Button(enabledMode:EButtonEnableMode.Playmode)]
         public void EndObjective()
         {
             ObjectiveManager.Instance.EndObjective(this);
         }
         
-        
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+        [Button(enabledMode:EButtonEnableMode.Playmode)]
         public void CompleteObjective()
         {
             ObjectiveManager.Instance.CompleteObjective(this);
         }
-        
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+
+        [Button(enabledMode:EButtonEnableMode.Playmode)]
         public void CancelObjectiveCompletion()
         {
             ObjectiveManager.Instance.CancelObjectiveCompletion(this);
         }
+        
         /// <summary>
         /// Needs to be called manually. should be called once
         /// </summary>
@@ -204,13 +206,19 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (task.IsActive)
             {
-                _activeTasks.Add(task);
-                OnObjectiveTaskAdded?.Invoke(task);
+                if (!_activeTasks.Contains(task))
+                {
+                    _activeTasks.Add(task);
+                    OnObjectiveTaskAdded?.Invoke(task);
+                }
             }
             else
             {
-                _activeTasks.Remove(task);
-                OnObjectiveTaskRemoved?.Invoke(task);
+                if (_activeTasks.Contains(task))
+                {
+                    _activeTasks.Remove(task);
+                    OnObjectiveTaskRemoved?.Invoke(task);
+                }
             }
         }
 
@@ -280,8 +288,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
             OnObjectiveHintUpdate?.Invoke(puzzleObjectiveHint);
         }
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+[Button(enabledMode:EButtonEnableMode.Playmode)]
         internal void ResetProgress()
         {
             _state = ObjectiveState.NotStarted;
@@ -302,6 +309,13 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             _tasks.Clear();
             _activeTasks.Clear();
             _hints.Clear();
+            _activeHints.Clear();
+            ResetProgress();
+        }
+        [Button]
+        public void Reset()
+        {
+            _activeTasks.Clear();
             _activeHints.Clear();
             ResetProgress();
         }
@@ -354,11 +368,24 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
         public override void AssignSerializedData(string data)
         {
-            _state = JsonConvert.DeserializeObject<ObjectiveState>(data);
+            var saveData = JsonConvert.DeserializeObject<ObjectiveSaveData>(data);
+            _state = saveData.ObjectiveState;
+
+            for (int i = 0; i < _tasks.Count; i++)
+            {
+                _tasks[i].AssignSerializedData(saveData.TaskStates[i]);
+            }
+            
+            for (int i = 0; i < _hints.Count; i++)
+            {
+                _hints[i].AssignSerializedData(saveData.HintStates[i]);
+            }
+            
+            OnObjectiveCompletionUpdated?.Invoke(this);
         }
 
         public override string GetSerializedData() {
-            return JsonConvert.SerializeObject(_state);
+            return JsonConvert.SerializeObject(new ObjectiveSaveData(this));
         }
 
         #endregion
@@ -366,6 +393,35 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public override string ToString()
         {
             return $"{name} {_state}";
+        }
+
+        [Serializable]
+        public class ObjectiveSaveData
+        {
+            public ObjectiveState ObjectiveState;
+            public List<string> TaskStates;
+            public List<string> HintStates;
+
+            //needed for serialize
+            public ObjectiveSaveData()
+            {
+            }
+
+            public ObjectiveSaveData(ObjectiveBase objectiveBase)
+            {
+                ObjectiveState = objectiveBase._state;
+                TaskStates = new ();
+                foreach (var task in objectiveBase.Tasks)
+                {
+                    TaskStates.Add(task.GetSerializedData());
+                }
+
+                HintStates = new();
+                foreach (var objectiveHint in objectiveBase.Hints)
+                {
+                    HintStates.Add(objectiveHint.GetSerializedData());
+                }
+            }
         }
     }
 }

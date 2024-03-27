@@ -1,4 +1,5 @@
 ﻿using System;
+using BDeshi.Logging;
 using NaughtyAttributes;
 using Newtonsoft.Json;
 using Studio23.SS2.InventorySystem.Data;
@@ -13,7 +14,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 {
     [CreateAssetMenu(menuName = "Studio-23/Objective System/Task", fileName = "objective task")]
     [Serializable]
-    public class ObjectiveTask : ItemBase
+    public class ObjectiveTask : ItemBase, ISubCategoryLoggerMixin<ObjectiveLogCategory>
     {
         [SerializeField] ObjectiveBase _parentObjective;
         // we do not actually need to serialize this in editor
@@ -22,7 +23,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         // This is manually serialized when saved as needed.
         [ShowNonSerializedField]
         private ObjectiveTaskState _state;
+
         [SerializeField] int _priority;
+        public bool InitiallyActive;
         public int Priority => _priority;
         public ObjectiveBase ParentObjective => _parentObjective;
         [ShowNativeProperty]
@@ -42,90 +45,66 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         }
 
     
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+[Button(enabledMode:EButtonEnableMode.Playmode)]
         public void AddTask()
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
             {
-                Debug.LogWarning($"can't add task {this} because parent objective is not active and valid");
+                Logger.LogWarning(ObjectiveLogCategory.Task,$"can't add task {this} because parent objective is not active and valid");
                 return;
             }
             if(_state != ObjectiveTaskState.NotStarted)
             {
-                Debug.LogWarning($"can't add task {this} because it has already started");
+                Logger.LogWarning(ObjectiveLogCategory.Task,$"can't add task {this} because it has already started");
                 return;
             }
-            
+
+            Logger.Log(ObjectiveLogCategory.Task,$"Add task {this}", this);
             _state = ObjectiveTaskState.InProgress;
             OnTaskActiveToggle?.Invoke(this);
         }
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+[Button(enabledMode:EButtonEnableMode.Playmode)]
         public void RemoveTask()
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
             {
-                Debug.LogWarning($"can't remove task {this} because parent objective is not active and valid");
+                Logger.LogWarning(ObjectiveLogCategory.Task,$"can't remove task {this} because parent objective is not active and valid");
                 return;
             }
             if(_state == ObjectiveTaskState.NotStarted)
             {
-                Debug.LogWarning($"can't remove task {this} because it hasn't been started");
+                Logger.LogWarning(ObjectiveLogCategory.Task,$"can't remove task {this} because it hasn't been started");
                 return;
             }
+            Logger.Log(ObjectiveLogCategory.Task,$"Remove task {this}", this);
+
             _state = ObjectiveTaskState.NotStarted;
             OnTaskActiveToggle?.Invoke(this);
             OnTaskCompletionToggle?.Invoke(this);
         }
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+[Button(enabledMode:EButtonEnableMode.Playmode)]
         public void ResetProgress()
         {
             _state = ObjectiveTaskState.NotStarted;
             OnTaskActiveToggle?.Invoke(this);
             OnTaskCompletionToggle?.Invoke(this);
         }
-        [ShowIf("ObjectiveManagerExists")]
-        [Button]
+[Button(enabledMode:EButtonEnableMode.Playmode)]
         public void CompleteTask()
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
             {
-                Debug.LogWarning($"can't complete task {this} because parent objective is not active and valid");
+                Logger.LogWarning(ObjectiveLogCategory.Task,$"can't complete task {this} because parent objective is not active and valid");
                 return;
             }
             if(_state != ObjectiveTaskState.InProgress)
             {
-                Debug.LogWarning($"can't complete task {this} because it isn't in progress");
+                Logger.LogWarning(ObjectiveLogCategory.Task,$"can't complete task {this} because it isn't in progress");
                 return;
             }
-
-            _state = ObjectiveTaskState.Completed;
-            OnTaskCompletionToggle?.Invoke(this);
-        }
-
-        /// <summary>
-        /// Use when we want to complete a task and immediately add another without allowing the objective to be completed
-        /// </summary>
-        /// <param name="taskToBeReplaced"></param>
-        /// <param name="taskToReplaceWith"></param>
-        public void CompleteAndReplaceSubtask(ObjectiveTask taskToBeReplaced, ObjectiveTask taskToReplaceWith)
-        {
-            if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
-            {
-                Debug.LogWarning($"can't complete task {this} because parent objective is not active and valid");
-                return;
-            }
-            if(_state != ObjectiveTaskState.InProgress)
-            {
-                Debug.LogWarning($"can't complete task {this} because it isn't in progress");
-                return;
-            }
+            Logger.Log(ObjectiveLogCategory.Task,$"Complete task {this}", this);
             
-            taskToReplaceWith.AddTask();
-            taskToBeReplaced.CompleteTask();
-
+            _state = ObjectiveTaskState.Completed;
             OnTaskCompletionToggle?.Invoke(this);
         }
 
@@ -151,7 +130,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [Button]
         public void Rename()
         {
-            Rename(this.Name);
+            Rename(this.Name +"__"+ _parentObjective.name);
         }
         
         public void Rename(string newName)
@@ -176,5 +155,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             return $"{Name} {_state}";
         }
+
+        public GameObject gameObject => ObjectiveManager.Instance.gameObject;
+        public ICategoryLogger<ObjectiveLogCategory> Logger => ObjectiveManager.Instance.Logger;
+        public ObjectiveLogCategory Category => ObjectiveLogCategory.Task;
     }
 }
