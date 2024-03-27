@@ -106,7 +106,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         }
         public void HandleObjectiveTaskRemoved(ObjectiveTask task)
         {
-            Logger.Log(ObjectiveLogCategory.Task, $"task {task} added", task);
+            Logger.Log(ObjectiveLogCategory.Task, $"task {task} removed", task);
             if (task.ParentObjective == _selectedObjective)
             {
                 HandleSelectedObjectiveUpdates(_selectedObjective);
