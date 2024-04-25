@@ -230,10 +230,8 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             ActiveObjectives.Remove(objective);
 
             objective.HandleObjectiveEnded();
-            objective.OnObjectiveCompletionUpdated -= HandleActiveObjectiveCompletionUpdate;
-            objective.OnObjectiveHintUpdate -= HandleHintUpdated;
-            objective.OnObjectiveTaskAdded -= OnActiveObjectiveTaskAdded;
-            objective.OnObjectiveTaskRemoved -= OnActiveObjectiveTaskRemoved;
+            UnsubToActiveObjective(objective);
+
             OnActiveObjectiveListUpdated?.Invoke();
 
             if(SelectedObjective == objective)
@@ -242,13 +240,12 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
         }
 
+   
+
         void ForceAddObjectiveToActives(ObjectiveBase newObjective)
         { 
             _activeObjectives.Add(newObjective);
-            newObjective.OnObjectiveCompletionUpdated += HandleActiveObjectiveCompletionUpdate;
-            newObjective.OnObjectiveHintUpdate += HandleActiveObjectiveUpdated;
-            newObjective.OnObjectiveTaskAdded += OnActiveObjectiveTaskAdded;
-            newObjective.OnObjectiveTaskRemoved += OnActiveObjectiveTaskRemoved;
+            SubToActiveObjective(newObjective);
 
             if (SelectedObjective == null)
             {
@@ -256,6 +253,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
             OnActiveObjectiveListUpdated?.Invoke();
         }
+
 
         private void HandleActiveObjectiveCompletionUpdate(ObjectiveBase objective)
         {
@@ -342,8 +340,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             objective.OnObjectiveHintUpdate += HandleObjectiveHintToggle;
         }
 
-  
-
         private void UnsubFromObjective(ObjectiveBase objective)
         {
             objective.OnObjectiveCompletionUpdated -= HandleAnyObjectiveCompletionUpdate;
@@ -352,7 +348,22 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             objective.OnObjectiveTaskRemoved -= HandleObjectiveTaskRemoved;
             objective.OnObjectiveHintUpdate -= HandleObjectiveHintToggle;
         }
-
+        
+        private void UnsubToActiveObjective(ObjectiveBase objective)
+        {
+            objective.OnObjectiveCompletionUpdated -= HandleActiveObjectiveCompletionUpdate;
+            objective.OnObjectiveHintUpdate -= HandleHintUpdated;
+            objective.OnObjectiveTaskAdded -= OnActiveObjectiveTaskAdded;
+            objective.OnObjectiveTaskRemoved -= OnActiveObjectiveTaskRemoved;
+        }
+        private void SubToActiveObjective(ObjectiveBase newObjective)
+        {
+            newObjective.OnObjectiveCompletionUpdated += HandleActiveObjectiveCompletionUpdate;
+            newObjective.OnObjectiveHintUpdate += HandleActiveObjectiveUpdated;
+            newObjective.OnObjectiveTaskAdded += OnActiveObjectiveTaskAdded;
+            newObjective.OnObjectiveTaskRemoved += OnActiveObjectiveTaskRemoved;
+        }
+        
         private void HandleSelectedObjectiveChangeAction(InputAction.CallbackContext context)
         {
             if (ActiveObjectives.Count == 0)
