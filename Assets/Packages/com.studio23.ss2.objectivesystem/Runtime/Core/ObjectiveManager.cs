@@ -240,8 +240,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
         }
 
-   
-
         void ForceAddObjectiveToActives(ObjectiveBase newObjective)
         { 
             _activeObjectives.Add(newObjective);
@@ -253,7 +251,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
             OnActiveObjectiveListUpdated?.Invoke();
         }
-
 
         private void HandleActiveObjectiveCompletionUpdate(ObjectiveBase objective)
         {
@@ -356,6 +353,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             objective.OnObjectiveTaskAdded -= OnActiveObjectiveTaskAdded;
             objective.OnObjectiveTaskRemoved -= OnActiveObjectiveTaskRemoved;
         }
+        
         private void SubToActiveObjective(ObjectiveBase newObjective)
         {
             newObjective.OnObjectiveCompletionUpdated += HandleActiveObjectiveCompletionUpdate;
