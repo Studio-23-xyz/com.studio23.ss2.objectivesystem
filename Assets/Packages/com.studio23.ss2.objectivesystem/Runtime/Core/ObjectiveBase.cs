@@ -254,7 +254,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             OnObjectiveCompletionUpdated?.Invoke(this);
         }
 
-
         public bool CheckCompletion() {
             int numRemaining = Tasks.Count;
             foreach (var task in ActiveTasks)
@@ -270,6 +269,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
             return numRemaining == 0;
         }
+        
         private void HandleHintActivation(ObjectiveHint puzzleObjectiveHint)
         {
             if (puzzleObjectiveHint.IsActive)
