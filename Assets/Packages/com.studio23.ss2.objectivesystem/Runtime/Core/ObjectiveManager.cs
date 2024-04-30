@@ -44,7 +44,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// </summary>
         public event Action SelectedObjectiveUpdated;
         public event Action OnActiveObjectiveListUpdated;
-        public event Action<ObjectiveBase> OnObjectiveCompleted;
+        public event Action<ObjectiveBase> OnAnyObjectiveCompleted;
+        public event Action<ObjectiveHint> OnAnyObjectiveHintUpdated;
+
         public event Action<ObjectiveHint> OnActiveObjectiveHintToggled;
         public event Action<ObjectiveTask> OnActiveObjectiveTaskAdded;
         public event Action<ObjectiveTask> OnActiveObjectiveTaskRemoved;
@@ -109,6 +111,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         }
 
         public void HandleObjectiveHintToggle(ObjectiveHint objectiveHint){
+            OnAnyObjectiveHintUpdated?.Invoke(objectiveHint);
             if (objectiveHint.ParentObjective == _selectedObjective)
             {
                 HandleSelectedObjectiveUpdates(_selectedObjective);
@@ -325,7 +328,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (objective.IsCompleted)
             {
-                OnObjectiveCompleted?.Invoke(objective);
+                OnAnyObjectiveCompleted?.Invoke(objective);
             }
         }
         private void SubToObjective(ObjectiveBase objective)
