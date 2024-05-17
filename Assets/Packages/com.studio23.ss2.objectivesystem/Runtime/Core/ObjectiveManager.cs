@@ -11,6 +11,7 @@ using Studio23.SS2.ObjectiveSystem.Utilities;
 using Studio23.SS2.SaveSystem.Interfaces;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 namespace Studio23.SS2.ObjectiveSystem.Core
 {
@@ -129,7 +130,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 Logger.LogWarning(ObjectiveLogCategory.ObjectiveStart, $"can't start objective at state {newObjective.State}");
                 return;
             }
-            
             if (!hadObjective)
             {
                 // if objectives inventory doesn't have the objective,
@@ -388,6 +388,20 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                     return;
                 }
                 SetSelectedIndex(newIndex);
+            }
+        }
+
+
+        public void SetActiveObjective(ObjectiveBase o)
+        {
+            int objectiveIndex = ActiveObjectives.IndexOf(o);
+            if (objectiveIndex < 0 || objectiveIndex >= ActiveObjectives.Count)
+            {
+                Debug.LogWarning($"trying to set {o} as active but not in active objectives", o);
+            }
+            else
+            {
+                SetSelectedIndex(objectiveIndex);
             }
         }
         /// <summary>
