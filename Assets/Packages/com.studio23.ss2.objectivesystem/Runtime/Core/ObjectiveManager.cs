@@ -248,7 +248,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             _activeObjectives.Add(newObjective);
             SubToActiveObjective(newObjective);
 
-            if (SelectedObjective == null)
+            if (SelectedObjective == null || CompareActiveObjectives(newObjective, _selectedObjective) < 0)
             {
                 SelectNewBestObjective();
             }
@@ -281,7 +281,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                 return -1;
             else if  (objective2 == Instance._selectedObjective)
                 return -1;
-            
             
             if (objective1.IsCompleted == objective2.IsCompleted)
             {
