@@ -239,7 +239,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
             if(SelectedObjective == objective)
             {
-                SelectNewBestObjective();
+                HandleActiveObjectiveListUpdated();
             }
         }
 
@@ -248,48 +248,63 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             _activeObjectives.Add(newObjective);
             SubToActiveObjective(newObjective);
 
-            if (SelectedObjective == null || CompareActiveObjectives(newObjective, _selectedObjective) < 0)
-            {
-                SelectNewBestObjective();
-            }
-            OnActiveObjectiveListUpdated?.Invoke();
+            // if (SelectedObjective == null || CompareActiveObjectives(newObjective, _selectedObjective) < 0)
+            // {
+            //     SelectNewBestObjective();
+            // }
+            HandleActiveObjectiveListUpdated();
         }
 
         private void HandleActiveObjectiveCompletionUpdate(ObjectiveBase objective)
         {
             HandleActiveObjectiveListUpdated();
-            if(SelectedObjective == null)
-            {
-                SelectNewBestObjective();
-            }
         }
 
         private void HandleActiveObjectiveUpdated(ObjectiveHint objectiveHint)
         {
             HandleActiveObjectiveListUpdated();
         }
+        [ContextMenu("updateActiveObjectives")]
         private void HandleActiveObjectiveListUpdated()
         {
             //#TODO this should be moved elsewhere where it isn't invoked every time the list is modified
-            ActiveObjectives.Sort(CompareActiveObjectives);
+            SelectNewBestObjective();
             OnActiveObjectiveListUpdated?.Invoke();
         }
 
         private static int CompareActiveObjectives(ObjectiveBase objective1, ObjectiveBase objective2)
         {
-            if (objective1 == Instance._selectedObjective)
-                return -1;
-            else if  (objective2 == Instance._selectedObjective)
-                return -1;
-            
+            // if (objective1 == Instance._selectedObjective)
+            //     return -1;
+            // else if  (objective2 == Instance._selectedObjective)
+            //     return -1;
+            //
+            Debug.Log($"{objective2.Priority.CompareTo(objective1.Priority)} Compare {objective1} vs {objective2} {objective1.Priority} vs {objective2.Priority}");
+
             if (objective1.IsCompleted == objective2.IsCompleted)
             {
-                return objective1.Priority.CompareTo(objective2.Priority);
+                if (objective1.Priority > objective2.Priority)
+                {
+                    return -1;
+                }else if (objective1.Priority < objective2.Priority)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
             }
+            // // If both have the same IsCompleted status, compare their priorities
+            // if (objective1.IsCompleted == objective2.IsCompleted)
+            // {
+            //
+            //     return objective2.Priority.CompareTo(objective1.Priority); // Higher priority first
+            // }
             // at this point, only one is completed.
             // if objective1 is completed, then it should be "larger"
             // hence 1:-1
-            return objective1.IsCompleted ? 1 : -1;
+            return objective1.IsCompleted ? 1 : -1; 
         }
 
         [ContextMenu("PrintAllT")]
@@ -440,7 +455,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             if (objective.IsCompleted)
             {
-                SelectNewBestObjective();
+                HandleActiveObjectiveListUpdated();
             }
             else
             {
@@ -448,17 +463,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
         }
 
-        void  SelectNewBestObjective() {
+        public void SelectNewBestObjective() {
             ActiveObjectives.Sort(CompareActiveObjectives);
-            int newIndex = -1;
-            for (int i = 0; i < ActiveObjectives.Count; i++)
-            {
-                if (!ActiveObjectives[i].IsCompleted)
-                {
-                    newIndex = i;
-                }
-            }
-            SetSelectedIndex(newIndex);
+            SetSelectedIndex(0);
         }
 
         [ContextMenu("PRINT Tasks")]
@@ -502,7 +509,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
             InitializeObjectives();
             HandleActiveObjectiveListUpdated();
-            SelectNewBestObjective();
             await UniTask.CompletedTask;
         }
 
