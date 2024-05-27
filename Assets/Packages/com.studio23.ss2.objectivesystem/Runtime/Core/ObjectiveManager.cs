@@ -274,13 +274,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
 
         private static int CompareActiveObjectives(ObjectiveBase objective1, ObjectiveBase objective2)
         {
-            // if (objective1 == Instance._selectedObjective)
-            //     return -1;
-            // else if  (objective2 == Instance._selectedObjective)
-            //     return -1;
-            //
-            Debug.Log($"{objective2.Priority.CompareTo(objective1.Priority)} Compare {objective1} vs {objective2} {objective1.Priority} vs {objective2.Priority}");
-
             if (objective1.IsCompleted == objective2.IsCompleted)
             {
                 if (objective1.Priority > objective2.Priority)
@@ -295,15 +288,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                     return 0;
                 }
             }
-            // // If both have the same IsCompleted status, compare their priorities
-            // if (objective1.IsCompleted == objective2.IsCompleted)
-            // {
-            //
-            //     return objective2.Priority.CompareTo(objective1.Priority); // Higher priority first
-            // }
-            // at this point, only one is completed.
-            // if objective1 is completed, then it should be "larger"
-            // hence 1:-1
+
             return objective1.IsCompleted ? 1 : -1; 
         }
 
