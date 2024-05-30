@@ -39,18 +39,28 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// Fired when selected objective switches to another one
         /// Instance.SelectedObjective can be null when this is fired
         /// </summary>
-        public event Action SelectedObjectiveChanged;
+        //public event Action SelectedObjectiveChanged;
+        public delegate void OnSelectedObjectiveChanged();
         /// <summary>
         /// Fired when selected objective gets any updates. Can be a hints update or a completed update
         /// </summary>
-        public event Action SelectedObjectiveUpdated;
-        public event Action OnActiveObjectiveListUpdated;
-        public event Action<ObjectiveBase> OnAnyObjectiveCompleted;
-        public event Action<ObjectiveHint> OnAnyObjectiveHintUpdated;
 
-        public event Action<ObjectiveHint> OnActiveObjectiveHintToggled;
-        public event Action<ObjectiveTask> OnActiveObjectiveTaskAdded;
-        public event Action<ObjectiveTask> OnActiveObjectiveTaskRemoved;
+        public OnSelectedObjectiveChanged SelectedObjectiveChanged;
+        public OnSelectedObjectiveChanged SelectedObjectiveUpdated;
+        public OnSelectedObjectiveChanged OnActiveObjectiveListUpdated;
+
+        public delegate void OnAnyObjectiveCompletedEvent(ObjectiveBase objective);
+        public delegate void OnAnyObjectiveHintUpdate(ObjectiveHint hint);
+
+        public OnAnyObjectiveCompletedEvent OnAnyObjectiveCompleted;
+        public OnAnyObjectiveHintUpdate OnAnyObjectiveHintUpdated;
+
+        public delegate void OnObjectiveHintEvent(ObjectiveHint hint);
+        public delegate void OnObjectiveTaskEvent(ObjectiveTask task);
+
+        public OnObjectiveHintEvent OnActiveObjectiveHintToggled;
+        public OnObjectiveTaskEvent OnActiveObjectiveTaskAdded;
+        public OnObjectiveTaskEvent OnActiveObjectiveTaskRemoved;
 
         public ICategoryLogger<ObjectiveLogCategory> Logger => _logger;
         [SerializeField] SerializableCategoryLogger<ObjectiveLogCategory> _logger = new ((ObjectiveLogCategory)(~0));
@@ -352,16 +362,16 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             objective.OnObjectiveCompletionUpdated -= HandleActiveObjectiveCompletionUpdate;
             objective.OnObjectiveHintUpdate -= HandleHintUpdated;
-            objective.OnObjectiveTaskAdded -= OnActiveObjectiveTaskAdded;
-            objective.OnObjectiveTaskRemoved -= OnActiveObjectiveTaskRemoved;
+            objective.OnObjectiveTaskAdded -= HandleObjectiveTaskAdded;
+            objective.OnObjectiveTaskRemoved -= HandleObjectiveTaskRemoved;
         }
         
         private void SubToActiveObjective(ObjectiveBase newObjective)
         {
             newObjective.OnObjectiveCompletionUpdated += HandleActiveObjectiveCompletionUpdate;
             newObjective.OnObjectiveHintUpdate += HandleActiveObjectiveUpdated;
-            newObjective.OnObjectiveTaskAdded += OnActiveObjectiveTaskAdded;
-            newObjective.OnObjectiveTaskRemoved += OnActiveObjectiveTaskRemoved;
+            newObjective.OnObjectiveTaskAdded += HandleObjectiveTaskAdded;
+            newObjective.OnObjectiveTaskRemoved += HandleObjectiveTaskRemoved;
         }
         
         private void HandleSelectedObjectiveChangeAction(InputAction.CallbackContext context)
