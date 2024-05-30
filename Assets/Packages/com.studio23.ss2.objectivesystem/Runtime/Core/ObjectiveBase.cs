@@ -8,6 +8,7 @@ using Studio23.SS2.ObjectiveSystem.Data;
 using UnityEditor;
 # endif
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 namespace Studio23.SS2.ObjectiveSystem.Core
@@ -48,20 +49,28 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [SerializeField] protected List<ObjectiveHint> _activeHints;
         public List<ObjectiveHint> ActiveHints => _activeHints;
 
+
+        public delegate void OnObjectiveActivationEvent(ObjectiveBase objective);
+        public delegate void OnObjectiveHintEvent(ObjectiveHint hint);
+        public delegate void OnObjectiveTaskEvent(ObjectiveTask task);
+
         /// <summary>
         /// Fired when the objective is activated or deactivated
         /// </summary>
-        public event Action<ObjectiveBase> ObjectiveActivationToggled;
+        /// 
+        public OnObjectiveActivationEvent ObjectiveActivationToggled;
 
         /// <summary>
         /// Fired when the objective completion state updates
         /// This may fire when completion progression changes as well
         /// like going 6/10 sticks obtained -> 7/10 sticks.
         /// </summary>
-        public event Action<ObjectiveBase> OnObjectiveCompletionUpdated;
-        public event Action<ObjectiveHint> OnObjectiveHintUpdate;
-        public event Action<ObjectiveTask> OnObjectiveTaskAdded;
-        public event Action<ObjectiveTask> OnObjectiveTaskRemoved;
+
+        public OnObjectiveActivationEvent OnObjectiveCompletionUpdated;
+        public OnObjectiveHintEvent OnObjectiveHintUpdate;
+        public OnObjectiveTaskEvent OnObjectiveTaskAdded;
+        public OnObjectiveTaskEvent OnObjectiveTaskRemoved;
+        public UnityEvent OnObjectiveCompleted;
         
         internal virtual void HandleObjectiveStarted()
         {
@@ -123,6 +132,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public void CompleteObjective()
         {
             ObjectiveManager.Instance.CompleteObjective(this);
+            OnObjectiveCompleted?.Invoke();
         }
 
         [Button(enabledMode:EButtonEnableMode.Playmode)]
