@@ -418,7 +418,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// if invalid index sets it to null
         /// </summary>
         /// <param name="index"></param>
-        private void SetSelectedIndex(int index)
+        public void SetSelectedIndex(int index)
         {
             if(SelectedObjective != null)
             {
