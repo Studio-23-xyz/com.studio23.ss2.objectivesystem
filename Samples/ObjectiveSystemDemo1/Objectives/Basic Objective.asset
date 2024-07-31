@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2961943304202274218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56f872340cd7e0248be1620bf619aec3, type: 3}
+  m_Name: Basic Objective_task_1
+  m_EditorClassIdentifier: 
+  Id: 
+  Name: 1
+  Description: 
+  _parentObjective: {fileID: 11400000}
+  _priority: 0
+  CompleteParentObjectiveOnCompletion: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 551b05fef304dea4b8f1daac821e4740, type: 3}
+  m_Name: Basic Objective
+  m_EditorClassIdentifier: 
+  Id: 
+  Name: 
+  Description: 
+  _priority: 0
+  _tasks:
+  - {fileID: -2961943304202274218}
+  _activeTasks: []
+  _hints:
+  - {fileID: 6487524224327392618}
+  _activeHints: []
+--- !u!114 &6487524224327392618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd3b8f454a2eba24db34c079813f5a43, type: 3}
+  m_Name: Basic Objective_hint_Red pillar
+  m_EditorClassIdentifier: 
+  Id: 
+  Name: Red pillar
+  Description: 
+  _parentObjective: {fileID: 11400000}
+  _priority: 0
