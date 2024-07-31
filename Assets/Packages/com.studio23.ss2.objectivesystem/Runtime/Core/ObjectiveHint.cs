@@ -15,6 +15,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
     [Serializable]
     public class ObjectiveHint: ItemBase, ISubCategoryLoggerMixin<ObjectiveLogCategory>
     {
+        public string HintPreviewName = "HintPreviewName";
         [SerializeField] ObjectiveBase _parentObjective;
         public ObjectiveBase ParentObjective => _parentObjective;
         [SerializeField] int _priority;
@@ -23,7 +24,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [NonSerialized][ShowNonSerializedField] private bool _isActive = false;
         public bool IsActive => _isActive;
         public event Action<ObjectiveHint> OnHintActivationToggled;
-        public bool ObjectiveManagerExists => ObjectiveManager.Instance != null;
 
         public void SetObjective(ObjectiveBase objective)
         {
@@ -37,7 +37,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             _isActive = shouldBeActive;
             OnHintActivationToggled?.Invoke(this);
         }
-[Button(enabledMode:EButtonEnableMode.Playmode)]
+        [Button(enabledMode:EButtonEnableMode.Playmode)]
         public void Add()
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))
