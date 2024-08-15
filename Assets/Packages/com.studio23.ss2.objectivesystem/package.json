@@ -1,10 +1,10 @@
 {
     "name": "com.studio23.ss2.objectivesystem",
-    "version": "1.0.19",
+    "version": "1.0.20",
     "displayName": "Objective System",
     "description": "Objective System that supports adding/removing objectives, objective task dependencies, hints.",
     "unity": "2022.3",
-    "unityRelease": "10f1",
+    "unityRelease": "14f1",
     "documentationUrl": "https://openupm.com/packages/com.studio23.ss2.objectivesystem/",
     "changelogUrl": "https://openupm.com/packages/com.studio23.ss2.objectivesystem/",
     "licensesUrl": "https://studio-23-xyz.github.io/com.studio23.ss2.objectivesystem/license/LICENSE.html",
