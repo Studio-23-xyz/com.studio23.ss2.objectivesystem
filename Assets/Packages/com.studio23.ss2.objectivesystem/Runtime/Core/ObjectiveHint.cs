@@ -4,6 +4,7 @@ using NaughtyAttributes;
 using Newtonsoft.Json;
 using Studio23.SS2.InventorySystem.Data;
 using UnityEngine;
+using UnityEngine.Localization;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -15,7 +16,8 @@ namespace Studio23.SS2.ObjectiveSystem.Core
     [Serializable]
     public class ObjectiveHint: ItemBase, ISubCategoryLoggerMixin<ObjectiveLogCategory>
     {
-        public string HintPreviewName = "HintPreviewName";
+        public LocalizedString LocalizedHintName;
+        public LocalizedString LocalizedHintDescription;
         [SerializeField] ObjectiveBase _parentObjective;
         public ObjectiveBase ParentObjective => _parentObjective;
         [SerializeField] int _priority;

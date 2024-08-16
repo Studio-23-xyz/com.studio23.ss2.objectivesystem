@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Studio23.SS2.InventorySystem.Data;
 using Studio23.SS2.ObjectiveSystem.Data;
 using UnityEngine;
+using UnityEngine.Localization;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -16,6 +17,8 @@ namespace Studio23.SS2.ObjectiveSystem.Core
     [Serializable]
     public class ObjectiveTask : ItemBase, ISubCategoryLoggerMixin<ObjectiveLogCategory>
     {
+        public LocalizedString TaskName;
+        public LocalizedString TaskDescription;
         [SerializeField] ObjectiveBase _parentObjective;
         // we do not actually need to serialize this in editor
         // this will be different based on save data.

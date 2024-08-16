@@ -9,6 +9,7 @@ using UnityEditor;
 # endif
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Localization;
 using UnityEngine.Serialization;
 
 namespace Studio23.SS2.ObjectiveSystem.Core
@@ -23,8 +24,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         // This is manually serialized when saved as needed.
         [ShowNonSerializedField] private ObjectiveState _state;
         public ObjectiveState State => _state;
-        public string ObjectiveUITitle => Name;
-        public string ObjectiveUIDesc => Description;
+        
+        public LocalizedString LocalizedName;
+        public LocalizedString LocalizedDescription;
         [ShowNativeProperty]
         public bool CanStart => _state == ObjectiveState.NotStarted;
         [ShowNativeProperty]
