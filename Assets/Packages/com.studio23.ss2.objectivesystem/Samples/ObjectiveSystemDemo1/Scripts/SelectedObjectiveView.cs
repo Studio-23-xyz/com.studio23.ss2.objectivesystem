@@ -76,7 +76,7 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
             _objectiveTitleTMP.text = objective.name;
             if (objective.IsCompleted)
                 _objectiveTitleTMP.text = $"<s>{_objectiveTitleTMP.text}</s>";
-            _objectiveDescTMP.text = objective.ObjectiveUIDesc;
+            _objectiveDescTMP.text = objective.Description;
 
             _sortedTasks.Clear();
             _sortedTasks.AddRange(objective.ActiveTasks);

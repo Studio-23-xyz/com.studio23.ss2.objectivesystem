@@ -2,6 +2,13 @@
 
 All notable changes to this Unity package will be documented in this file.
 
+## [v1.0.21] - 2024-08-22
+
+### Changed
+
++ Added localization support.
+
+
 ## [v1.0.20] - 2024-08-15
 
 ### Changed
@@ -12,7 +19,7 @@ All notable changes to this Unity package will be documented in this file.
 
 ### Changed 
 
-+ Chaned Events and Actions to Delegates
++ Changed Events and Actions to Delegates
 
 
 ## [v1.0.8] - 2024-03-18
