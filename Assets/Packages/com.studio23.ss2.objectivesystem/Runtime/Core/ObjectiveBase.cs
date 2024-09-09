@@ -70,6 +70,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public OnObjectiveHintEvent OnObjectiveHintUpdate;
         public OnObjectiveTaskEvent OnObjectiveTaskAdded;
         public OnObjectiveTaskEvent OnObjectiveTaskRemoved;
+        public UnityEvent OnObjectiveStarted;
         public UnityEvent OnObjectiveCompleted;
         
         internal virtual void HandleObjectiveStarted()
@@ -121,6 +122,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
                     task.AddTask();
                 }
             }
+            OnObjectiveStarted?.Invoke();
         }
         [Button(enabledMode:EButtonEnableMode.Playmode)]
         public void EndObjective()
