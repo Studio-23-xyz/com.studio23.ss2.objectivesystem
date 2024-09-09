@@ -10,6 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
+
 namespace Studio23.SS2.ObjectiveSystem.Core
 {
     [CreateAssetMenu(menuName = "Studio-23/Objective System/Basic Objective", fileName = "Basic Objective")]
@@ -35,6 +36,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [SerializeField] int _priority = 0;
         public int Priority => _priority;
 
+        public bool ShouldDisplayObjectiveCount = false;
         [Expandable]
         [SerializeField] protected List<ObjectiveTask> _tasks;
         
