@@ -27,7 +27,7 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
             LoadObjectives();
         }
 
-        private void LoadObjectives(ObjectiveHint obj)
+        private void LoadObjectives(ObjectiveHintBase obj)
         {
             LoadObjectives();
         }

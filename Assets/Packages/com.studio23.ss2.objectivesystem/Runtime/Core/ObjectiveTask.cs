@@ -36,11 +36,19 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [ShowNativeProperty]
         public bool IsCompleted => _state == ObjectiveTaskState.Completed;
         //this is just for the button
-        public bool ObjectiveManagerExists => ObjectiveManager.Instance != null;
         public bool CompleteParentObjectiveOnCompletion = false;
-
         public event Action<ObjectiveTask> OnTaskCompletionToggle;
         public event Action<ObjectiveTask> OnTaskActiveToggle;
+
+        public string GetLocalizedTaskName()
+        {
+            return TaskName.GetLocalizedString();
+        }
+        
+        public string GetLocalizedTaskDescription()
+        {
+            return TaskDescription.GetLocalizedString();
+        }
 
         public void SetObjective(ObjectiveBase parentObjective)
         {
@@ -85,14 +93,14 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             OnTaskActiveToggle?.Invoke(this);
             OnTaskCompletionToggle?.Invoke(this);
         }
-[Button(enabledMode:EButtonEnableMode.Playmode)]
+        [Button(enabledMode:EButtonEnableMode.Playmode)]
         public void ResetProgress()
         {
             _state = ObjectiveTaskState.NotStarted;
             OnTaskActiveToggle?.Invoke(this);
             OnTaskCompletionToggle?.Invoke(this);
         }
-[Button(enabledMode:EButtonEnableMode.Playmode)]
+        [Button(enabledMode:EButtonEnableMode.Playmode)]
         public void CompleteTask()
         {
             if (!ObjectiveManager.Instance.IsObjectiveActiveAndValid(_parentObjective))

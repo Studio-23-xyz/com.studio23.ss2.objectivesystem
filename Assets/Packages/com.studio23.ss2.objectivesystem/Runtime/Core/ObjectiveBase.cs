@@ -44,14 +44,14 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         [SerializeField] protected List<ObjectiveTask> _activeTasks;
         public List<ObjectiveTask> ActiveTasks => _activeTasks;
         [Expandable]
-        [SerializeField] protected List<ObjectiveHint> _hints;
-        public List<ObjectiveHint> Hints => _hints;
-        [SerializeField] protected List<ObjectiveHint> _activeHints;
-        public List<ObjectiveHint> ActiveHints => _activeHints;
+        [SerializeField] protected List<ObjectiveHintBase> _hints;
+        public List<ObjectiveHintBase> Hints => _hints;
+        [SerializeField] protected List<ObjectiveHintBase> _activeHints;
+        public List<ObjectiveHintBase> ActiveHints => _activeHints;
 
 
         public delegate void OnObjectiveActivationEvent(ObjectiveBase objective);
-        public delegate void OnObjectiveHintEvent(ObjectiveHint hint);
+        public delegate void OnObjectiveHintEvent(ObjectiveHintBase hint);
         public delegate void OnObjectiveTaskEvent(ObjectiveTask task);
 
         /// <summary>
@@ -282,25 +282,24 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             return numRemaining == 0;
         }
         
-        private void HandleHintActivation(ObjectiveHint puzzleObjectiveHint)
+        private void HandleHintActivation(ObjectiveHintBase objectiveHintBase)
         {
-            if (puzzleObjectiveHint.IsActive)
+            if (objectiveHintBase.IsActive)
             {
-                if (!_activeHints.Contains(puzzleObjectiveHint))
+                if (!_activeHints.Contains(objectiveHintBase))
                 {
-                    _activeHints.Add(puzzleObjectiveHint);
+                    _activeHints.Add(objectiveHintBase);
                 }
             }
             else
             {
-                if (_activeHints.Contains(puzzleObjectiveHint))
+                if (_activeHints.Contains(objectiveHintBase))
                 {
-                    _activeHints.Remove(puzzleObjectiveHint);
+                    _activeHints.Remove(objectiveHintBase);
                 }
             }
-            OnObjectiveHintUpdate?.Invoke(puzzleObjectiveHint);
+            OnObjectiveHintUpdate?.Invoke(objectiveHintBase);
         }
-[Button(enabledMode:EButtonEnableMode.Playmode)]
         internal void ResetProgress()
         {
             _state = ObjectiveState.NotStarted;
@@ -331,50 +330,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             _activeHints.Clear();
             ResetProgress();
         }
-
-        #region EDITOR
-        # if UNITY_EDITOR
-        
-  
-        [Button]
-        public void CreateAndAddTask()
-        {
-            var task = ScriptableObject.CreateInstance<ObjectiveTask>();
-            task.Name = (_tasks.Count + 1).ToString();
-            task.name = GetTaskFullAssetName(task.Name);
-            task.SetObjective(this);
-            _tasks.Add(task);
-
-            AssetDatabase.AddObjectToAsset(task, this);
-            AssetDatabase.SaveAssets();
-            EditorUtility.SetDirty(this);
-        }
-
-        public string GetTaskFullAssetName(string baseTaskName)
-        {
-            return $"{name}_task_{baseTaskName}";
-        }
-
-        [Button]
-        public void CreateAndAddHint()
-        {
-            var hint = ScriptableObject.CreateInstance<ObjectiveHint>();
-            hint.Name = (_hints.Count + 1).ToString();
-            hint.name = getFullHintAssetName(hint.Name);
-            _hints.Add(hint);
-            hint.SetObjective(this);
-
-            AssetDatabase.AddObjectToAsset(hint, this);
-            AssetDatabase.SaveAssets();
-            EditorUtility.SetDirty(this);
-        }
-
-        public string getFullHintAssetName(string hintBaseName)
-        {
-            return $"{name}_hint_{hintBaseName}";
-        }
-#endif
-        #endregion
 
         #region Save/Load
 

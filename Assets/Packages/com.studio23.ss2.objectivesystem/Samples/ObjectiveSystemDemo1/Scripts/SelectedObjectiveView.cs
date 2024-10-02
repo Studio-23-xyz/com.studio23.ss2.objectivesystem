@@ -19,7 +19,7 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
         [SerializeField] List<ObjectiveTaskView> _activeTaskViewList;
         [SerializeField] Transform _objectiveTaskViewContainer;
 
-        List<ObjectiveHint> _sortedHints;
+        List<ObjectiveHintBase> _sortedHints;
         public int MaxHintsToShow = 1;
         [SerializeField] HintView _hintViewPrefab;
         [SerializeField] Transform _hintViewsContainer;
@@ -29,7 +29,7 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
         private void Awake()
         {
             _sortedTasks = new List<ObjectiveTask> ();
-            _sortedHints = new List<ObjectiveHint>();
+            _sortedHints = new ();
 
             _activeTaskViewList.Clear();
             _hintViewList.Clear();
@@ -104,7 +104,7 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
             }
         }
 
-        private int CompareHints(ObjectiveHint x, ObjectiveHint y)
+        private int CompareHints(ObjectiveHintBase x, ObjectiveHintBase y)
         {
             return x.Priority.CompareTo(y.Priority);
         }

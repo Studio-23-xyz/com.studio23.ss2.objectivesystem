@@ -50,12 +50,12 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         public OnSelectedObjectiveChanged OnActiveObjectiveListUpdated;
 
         public delegate void OnAnyObjectiveCompletedEvent(ObjectiveBase objective);
-        public delegate void OnAnyObjectiveHintUpdate(ObjectiveHint hint);
+        public delegate void OnAnyObjectiveHintUpdate(ObjectiveHintBase hint);
 
         public OnAnyObjectiveCompletedEvent OnAnyObjectiveCompleted;
         public OnAnyObjectiveHintUpdate OnAnyObjectiveHintUpdated;
 
-        public delegate void OnObjectiveHintEvent(ObjectiveHint hint);
+        public delegate void OnObjectiveHintEvent(ObjectiveHintBase hint);
         public delegate void OnObjectiveTaskEvent(ObjectiveTask task);
 
         public OnObjectiveHintEvent OnActiveObjectiveHintToggled;
@@ -121,9 +121,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             }
         }
 
-        public void HandleObjectiveHintToggle(ObjectiveHint objectiveHint){
-            OnAnyObjectiveHintUpdated?.Invoke(objectiveHint);
-            if (objectiveHint.ParentObjective == _selectedObjective)
+        public void HandleObjectiveHintToggle(ObjectiveHintBase hint){
+            OnAnyObjectiveHintUpdated?.Invoke(hint);
+            if (hint.ParentObjective == _selectedObjective)
             {
                 HandleSelectedObjectiveUpdates(_selectedObjective);
             }
@@ -220,9 +220,9 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             return Objectives.HasItem(objective) && objective.IsActive;
         }
-        private void HandleHintUpdated(ObjectiveHint objectiveHint)
+        private void HandleHintUpdated(ObjectiveHintBase hint)
         {
-            OnActiveObjectiveHintToggled?.Invoke(objectiveHint);
+            OnActiveObjectiveHintToggled?.Invoke(hint);
         }
 
         public void AddObjectiveToActives(ObjectiveBase objective)
@@ -270,7 +270,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             HandleActiveObjectiveListUpdated();
         }
 
-        private void HandleActiveObjectiveUpdated(ObjectiveHint objectiveHint)
+        private void HandleActiveObjectiveUpdated(ObjectiveHintBase hint)
         {
             HandleActiveObjectiveListUpdated();
         }
@@ -443,7 +443,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             SelectedObjectiveChanged?.Invoke();
         }
 
-        private void HandleSelectedObjectiveUpdates(ObjectiveHint objectiveHint) {
+        private void HandleSelectedObjectiveUpdates(ObjectiveHintBase objectiveHint) {
             SelectedObjectiveUpdated?.Invoke();
         }
         private void HandleSelectedObjectiveUpdates(ObjectiveBase objective)

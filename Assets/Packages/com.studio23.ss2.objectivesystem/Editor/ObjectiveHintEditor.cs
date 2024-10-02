@@ -15,9 +15,9 @@ namespace Studio23.SS2.ObjectiveSystem.Editor
             GUILayout.Space(10f);
 
             if (GUILayout.Button("Rename"))
-                hint.Rename();
+                Rename(hint);
             if (GUILayout.Button("Destroy Hint"))
-                hint.DestroyHint();
+                DestroyHint(hint);
             
             if (EditorApplication.isPlaying)
             {
@@ -32,6 +32,35 @@ namespace Studio23.SS2.ObjectiveSystem.Editor
                 
                 
             }
+        }
+        
+
+    
+
+        public void Rename(ObjectiveHint hintBase)
+        {
+            Rename(ObjectiveBaseEditor.getFullHintAssetName(hintBase.ParentObjective, hintBase.Name));
+        }
+
+        public void DestroyHint(ObjectiveHint hint)
+        {
+            if (hint.ParentObjective != null) 
+            {
+                Undo.RecordObject(hint.ParentObjective, "Hint");
+                hint.ParentObjective.Hints.Remove(hint);
+            }
+
+            EditorUtility.SetDirty(hint.ParentObjective);
+            Undo.DestroyObjectImmediate(hint);
+            AssetDatabase.SaveAssetIfDirty(hint.ParentObjective);
+        }
+
+        public void Rename(string newName)
+        {
+            this.name = newName;
+
+            AssetDatabase.SaveAssets();
+            EditorUtility.SetDirty(this);
         }
     }
 }

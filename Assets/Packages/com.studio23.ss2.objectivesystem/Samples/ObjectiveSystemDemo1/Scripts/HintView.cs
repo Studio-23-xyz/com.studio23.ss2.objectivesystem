@@ -8,7 +8,7 @@ namespace Studio23.SS2.ObjectiveSystem.Samples.ObjectiveSystemDemo1
     {
         [SerializeField] TextMeshProUGUI _hintTmp;
 
-        public void LoadHint(ObjectiveHint objectiveHint)
+        public void LoadHint(ObjectiveHintBase objectiveHint)
         {
             _hintTmp.text = objectiveHint.Description;
         }
