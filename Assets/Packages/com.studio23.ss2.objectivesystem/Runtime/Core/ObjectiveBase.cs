@@ -148,7 +148,6 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         /// </summary>
         public virtual void Initialize()
         {
-            Debug.Log($" init {this}");
             foreach (var hint in Hints)
             {
                 hint.SetObjective(this);

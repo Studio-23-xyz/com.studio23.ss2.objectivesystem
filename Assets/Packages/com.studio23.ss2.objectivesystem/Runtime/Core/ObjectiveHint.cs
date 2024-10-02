@@ -20,15 +20,7 @@ namespace Studio23.SS2.ObjectiveSystem.Core
             return LocalizedHintDescription.GetLocalizedString();
         }
 
-        public override void AssignSerializedData(string data)
-        {
-            _isActive = JsonConvert.DeserializeObject<bool>(data);
-        }
 
-        public override string GetSerializedData()
-        {
-            return JsonConvert.SerializeObject(_isActive);
-        }
 
     }
 }

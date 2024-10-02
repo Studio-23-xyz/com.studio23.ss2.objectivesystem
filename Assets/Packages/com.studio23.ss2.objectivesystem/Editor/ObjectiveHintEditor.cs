@@ -4,16 +4,17 @@ using UnityEngine;
 
 namespace Studio23.SS2.ObjectiveSystem.Editor
 {
+    [CustomEditor(typeof(ObjectiveHintBase), true)]
     public class ObjectiveHintEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
 
-            ObjectiveHint hint = (ObjectiveHint)target;
-            
+            ObjectiveHintBase hint = (ObjectiveHintBase)target;
             GUILayout.Space(10f);
 
+            GUILayout.Toggle(hint.IsActive, "IsActive");
             if (GUILayout.Button("Rename"))
                 Rename(hint);
             if (GUILayout.Button("Destroy Hint"))
@@ -29,20 +30,15 @@ namespace Studio23.SS2.ObjectiveSystem.Editor
                 
                 if (GUILayout.Button("Add")) 
                     hint.Add();
-                
-                
             }
         }
-        
 
-    
-
-        public void Rename(ObjectiveHint hintBase)
+        public void Rename(ObjectiveHintBase hintBase)
         {
             Rename(ObjectiveBaseEditor.getFullHintAssetName(hintBase.ParentObjective, hintBase.Name));
         }
 
-        public void DestroyHint(ObjectiveHint hint)
+        public void DestroyHint(ObjectiveHintBase hint)
         {
             if (hint.ParentObjective != null) 
             {

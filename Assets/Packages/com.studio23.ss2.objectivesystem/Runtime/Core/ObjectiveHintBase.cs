@@ -1,6 +1,7 @@
 using System;
 using BDeshi.Logging;
 using NaughtyAttributes;
+using Newtonsoft.Json;
 using Studio23.SS2.InventorySystem.Data;
 using UnityEditor;
 using UnityEngine;
@@ -68,7 +69,15 @@ namespace Studio23.SS2.ObjectiveSystem.Core
         {
             SetActive(false);
         }
+        public override void AssignSerializedData(string data)
+        {
+            _isActive = JsonConvert.DeserializeObject<bool>(data);
+        }
 
+        public override string GetSerializedData()
+        {
+            return JsonConvert.SerializeObject(_isActive);
+        }
 
     }
 }
