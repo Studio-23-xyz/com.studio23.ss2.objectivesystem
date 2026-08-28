@@ -1,0 +1,24 @@
+{
+    "name": "com.studio23.s22.objectivesystem",
+    "rootNamespace": "Studio23.SS2.ObjectiveSystem",
+    "references": [
+        "GUID:343deaaf83e0cee4ca978e7df0b80d21",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:46158582eccf34a44b1babd93ec99d06",
+        "GUID:776d03a35f1b52c4a9aed9f56d7b4229",
+        "GUID:07a7650ccbb2b2a4d932ea5511235954",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:b85a516fe86321c44bbce182e5e09470",
+        "GUID:eec0964c48f6f4e40bc3ec2257ccf8c5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
